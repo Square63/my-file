@@ -168,7 +168,7 @@ $(function() {
     done: function(e, data) {
       var name = data.context.find(".filename").text();
       var url = uploadedFilePath(data);
-      var link = "<a href='" + url + "'>" + name + "<a/>";
+      var link = "<a target='_blank' href='" + url + "'>" + name + "<a/>";
       data.context.find(".filename").html(link);
       data.context.find(".start").html("");
       data.context.find(".cancel").html("");
