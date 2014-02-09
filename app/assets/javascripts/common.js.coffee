@@ -25,4 +25,7 @@ $(document).ready ->
       data.submit();
 
     progress: (e, data) ->
-      console.log [data.loaded, data.total]
+      $element = $("#progress-bar")
+      percent = data.loaded / data.total * 100
+      width = percent * $element.width() / 100;
+      $element.find('.bar').animate({ width: width }, 500).html(percent + "%&nbsp;")
