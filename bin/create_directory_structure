@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+def create_directory(d)
+  dir = [Rails.root, d].join("/")
+  FileUtils.mkdir(dir) unless File.directory?(dir)
+end
+
+chars = (0..9).to_a + ('a'..'z').to_a + ('A'..'Z').to_a
+
+chars.each do |c|
+  create_directory ['tmp', 'files', c].join("/")
+end
+
+create_directory "downloads"
