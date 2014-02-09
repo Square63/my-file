@@ -157,6 +157,8 @@ $(function() {
 
       // Add this upload data to our files container
       files.push(data);
+
+      startUpload(index);
     },
 
     /* 
@@ -170,6 +172,7 @@ $(function() {
       data.context.find(".filename").html(link);
       data.context.find(".start").html("");
       data.context.find(".cancel").html("");
+      data.context.find(".progress");
     },
 
     /*
