@@ -21,3 +21,5 @@ module Wall
     # config.i18n.default_locale = :de
   end
 end
+
+require 'obfuscate_id'
