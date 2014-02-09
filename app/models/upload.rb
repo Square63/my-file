@@ -1,5 +1,7 @@
 class Upload < ActiveRecord::Base
 
+  obfuscate_id :spin => 1021914
+
   after_create :move_file
 
   def padded_id
