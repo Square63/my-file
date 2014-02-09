@@ -1,3 +1,8 @@
-<%= file_field_tag "file", "data-url" =>"/upload", "id" => "upload-input-file" %>
+<input id="fileupload" type="file" name="files[]" data-url="/upload" multiple>
 
-<div id="progress-bar"><div class="bar"></div></div>
+<button id="start_upload" type="button">Start all</button>
+<button id="stop_uploads" type="button">Cancel all</button>
+<span>Total progress: <span id="total_progress">0%</span></span>
+
+<table id="files">
+</table>

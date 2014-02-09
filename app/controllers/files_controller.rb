@@ -1,7 +1,9 @@
 class FilesController < ApplicationController
 
   def create
-    render json: params if request.post?
+    response = params
+    response["url"] = params[:file_path]
+    render text: response.to_json
   end
 
 end
