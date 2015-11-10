@@ -2,6 +2,10 @@ class Upload < ActiveRecord::Base
 
   obfuscate_id :spin => 1021914
 
+  validates_presence_of :user
+
+  belongs_to :user
+
   after_create :move_file
 
   def padded_id

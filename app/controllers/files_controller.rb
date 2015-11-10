@@ -1,4 +1,5 @@
 class FilesController < ApplicationController
+  skip_before_filter :authenticate_user!, only: [:show]
 
   def show
     @upload = Upload.find params[:id]
@@ -10,9 +11,18 @@ class FilesController < ApplicationController
 
   def create
     @upload = Upload.new file_params
+    @upload.user = current_user
     @upload.save
 
     render text: {url: file_path(@upload)}.to_json
+  end
+
+  def nginx
+    raise params.inspect
+    params[:file] = {
+      name: "something"
+    }
+    create
   end
 
   private

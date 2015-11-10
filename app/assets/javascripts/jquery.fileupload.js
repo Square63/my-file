@@ -870,6 +870,7 @@
                     that._sending += 1;
                     // Set timer for bitrate progress calculation:
                     options._bitrateTimer = new that._BitrateTimer();
+                    window.hello = options;
                     jqXHR = jqXHR || (
                         ((aborted || that._trigger(
                             'send',
