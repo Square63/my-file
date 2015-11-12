@@ -1,6 +1,10 @@
 class FilesController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:show]
 
+  def index
+    @uploads = current_user.uploads
+  end
+
   def show
     @upload = Upload.find params[:id]
 
@@ -17,11 +21,19 @@ class FilesController < ApplicationController
     render text: {url: file_path(@upload)}.to_json
   end
 
-  def nginx
-    raise params.inspect
+  def nginx_proxy
+    file = Tempfile.new("nginx_proxy")
+    file.binmode
+    file.write request.env["rack.input"].read
+    file.close
+
     params[:file] = {
-      name: "something"
+      name: request.env["HTTP_CONTENT_DISPOSITION"][/"(.+)"/, 1],
+      path: file.path,
+      content_type: request.env["CONTENT_TYPE"],
+      size: request.env["CONTENT_LENGTH"],
     }
+
     create
   end
 
