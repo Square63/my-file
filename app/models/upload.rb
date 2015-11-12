@@ -41,4 +41,11 @@ class Upload < ActiveRecord::Base
     FileUtils.mv path, full_target_path
   end
 
+  def mime_major
+    content_type.split('/').first
+  end
+
+  def mime_minor
+    content_type.split('/').last
+  end
 end
