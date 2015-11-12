@@ -11,7 +11,7 @@
   <% @uploads.each do |upload| %>
     <tr>
       <td class="filetype">image/jpeg</td>
-      <td class="filename"><%= link_to upload.name, files_path(upload), target: "_blank" %></td>
+      <td class="filename"><%= link_to upload.name, upload, target: "_blank" %></td>
       <td></td>
       <td></td>
       <td></td>

@@ -1,10 +1,10 @@
 Wall::Application.routes.draw do
 
   devise_for :users
-  resources :files
+  resources :uploads
 
-  post "/upload" => "files#nginx_proxy"
+  post "/upload" => "uploads#nginx_proxy"
 
-  root "files#index"
+  root "uploads#index"
 
 end

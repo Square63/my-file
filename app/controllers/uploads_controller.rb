@@ -1,4 +1,4 @@
-class FilesController < ApplicationController
+class UploadsController < ApplicationController
   skip_before_filter :authenticate_user!, only: [:show]
 
   def index
@@ -14,11 +14,11 @@ class FilesController < ApplicationController
   end
 
   def create
-    @upload = Upload.new file_params
+    @upload = Upload.new upload_params
     @upload.user = current_user
     @upload.save
 
-    render text: {url: file_path(@upload)}.to_json
+    render text: {url: upload_path(@upload)}.to_json
   end
 
   def nginx_proxy
@@ -27,7 +27,7 @@ class FilesController < ApplicationController
     file.write request.env["rack.input"].read
     file.close
 
-    params[:file] = {
+    params[:upload] = {
       name: request.env["HTTP_CONTENT_DISPOSITION"][/"(.+)"/, 1],
       path: file.path,
       content_type: request.env["CONTENT_TYPE"],
@@ -39,8 +39,8 @@ class FilesController < ApplicationController
 
   private
 
-  def file_params
-    params.require(:file).permit(:name, :content_type, :path, :md5, :size)
+  def upload_params
+    params.require(:upload).permit(:name, :content_type, :path, :md5, :size)
   end
 
 end
