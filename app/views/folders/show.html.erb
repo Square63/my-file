@@ -4,7 +4,15 @@
 
 <h1><%= @folder.name %></h1>
 
-<input id="fileupload" type="file" name="files[]" data-url="<%= nginx_proxy_path(folder_id: @folder.to_param) %>" multiple>
+
+<div class="image-upload">
+  <label for="fileupload">
+    <%= image_tag "file-add.png" %>
+  </label>
+  <input id="fileupload" type="file" name="files[]" data-url="<%= nginx_proxy_path(folder_id: @folder.to_param) %>" multiple>
+</div>
+
+
 
 <div id="files">
   <%= render @folder.uploads %>
