@@ -1,8 +1,9 @@
 class UploadsController < ApplicationController
+  before_filter :get_folder, only: [:index, :create, :nginx_proxy]
   skip_before_filter :authenticate_user!, only: [:show]
 
   def index
-    @uploads = current_user.uploads
+    @uploads = @folder.uploads
   end
 
   def show
@@ -14,8 +15,7 @@ class UploadsController < ApplicationController
   end
 
   def create
-    @upload = Upload.new upload_params
-    @upload.user = current_user
+    @upload = @folder.uploads.new upload_params
     @upload.save
 
     render @upload
@@ -44,6 +44,10 @@ class UploadsController < ApplicationController
 
   def upload_params
     params.require(:upload).permit(:name, :content_type, :path, :md5, :size)
+  end
+
+  def get_folder
+    @folder = Folder.find params[:folder_id]
   end
 
 end

@@ -1,9 +1,0 @@
-<% content_for :data_container do %>
-  <%= render Upload.new %>
-<% end %>
-
-<input id="fileupload" type="file" name="files[]" data-url="/upload" multiple>
-
-<div id="files">
-  <%= render @uploads %>
-</div>

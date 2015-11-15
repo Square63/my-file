@@ -3,9 +3,9 @@ class Upload < ActiveRecord::Base
 
   obfuscate_id :spin => 1021914
 
-  validates_presence_of :user
+  validates_presence_of :folder
 
-  belongs_to :user
+  belongs_to :folder
 
   after_create :move_file
 
