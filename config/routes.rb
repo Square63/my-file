@@ -4,6 +4,7 @@ Wall::Application.routes.draw do
   resources :uploads
 
   post "/upload" => "uploads#nginx_proxy"
+  get "F:id" => "uploads#show", as: :download
 
   root "uploads#index"
 
