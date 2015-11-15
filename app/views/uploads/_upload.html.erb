@@ -1,8 +1,9 @@
-<div class="file <%= "new" if upload.new_record? %>">
-  <div class="icon"><%= upload_icon(upload) %></div>
-  <div class="name"><%= link_to upload.name, download_path(upload), target: "_blank" %></div>
-  <div class="size">(<span class="value"><%= number_to_human_size upload.size %></span>)</div>
-  <div class="progress"></div>
-  <div class="start"></div>
-  <div class="cancel"></div>
+<div class="file col-md-2 media <%= "new" if upload.new_record? %>">
+  <div class="media-left">
+    <div class="icon"><%= link_to upload_icon(upload), download_path(upload), target: "_blank" %></div>
+  </div>
+  <div class="media-body">
+    <div class="name media-heading"><%= link_to upload.name, download_path(upload), target: "_blank" %></div>
+    <div class="size">(<span class="value"><%= number_to_human_size upload.size %></span>)</div>
+  </div>
 </div>

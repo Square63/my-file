@@ -2,24 +2,24 @@
   <%= render Upload.new %>
 <% end %>
 
-<h1><%= @folder.name %></h1>
+<%= folder_breadcrumbs_for(@folder) %>
 
-<%= link_to "Back", @folder.parent if @folder.parent %>
-
-<div class="image-upload">
-  <label for="fileupload">
-    <%= image_tag "file-add.png", class: "file-add" %>
-  </label>
-  <input id="fileupload" type="file" name="files[]" data-url="<%= nginx_proxy_path(folder_id: @folder.to_param) %>" multiple>
+<div class="row">
+  <div id="folders">
+    <%= render @folder.folders %>
+    <div class="folder-add col-md-2">
+      <%= link_to '<span class="glyphicon glyphicon-plus"></span> folder'.html_safe, folders_path(parent_id: @folder), method: :post, class: "btn btn-warning btn-sm" %>
+    </div>
+  </div>
 </div>
-
-<%= link_to image_tag("file-add.png", class: "file-add"), folders_path(parent_id: @folder), method: :post %>
-
-
-<div id="folders">
-  <%= render @folder.folders %>
-</div>
-
-<div id="files">
-  <%= render @folder.uploads %>
+<div class="row">
+  <div id="files">
+    <%= render @folder.uploads %>
+  </div>
+  <div class="file-add col-md-2">
+    <label for="fileupload" class="btn btn-primary btn-sm">
+      <span class="glyphicon glyphicon-plus"></span> file
+    </label>
+    <input id="fileupload" type="file" name="files[]" data-url="<%= nginx_proxy_path(folder_id: @folder.to_param) %>" multiple>
+  </div>
 </div>

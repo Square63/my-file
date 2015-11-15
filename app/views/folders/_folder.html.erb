@@ -1,4 +1,8 @@
-<div class="folder">
-  <div class="icon"><%= image_tag "folder.png" %></div>
-  <div class="name"><%= link_to folder.name, folder %></div>
+<div class="folder col-md-2 media">
+  <div class="media-left">
+    <span class="icon"><%= link_to image_tag("folder.png"), folder %></span>
+  </div>
+  <div class="media-body">
+    <div class="name media-heading"><%= link_to folder.name, folder %></div>
+  </div>
 </div>

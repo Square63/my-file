@@ -13,4 +13,16 @@ module ApplicationHelper
     image
   end
 
+  def folder_breadcrumbs_for(folder)
+    content_tag :ol, class: "breadcrumb" do
+      folder_breadcrumb_for(folder)
+    end.html_safe
+  end
+
+  def folder_breadcrumb_for(folder)
+    return "" unless folder
+    (folder_breadcrumb_for(folder.parent) + content_tag(:li) do
+      [image_tag("folder-small.png"), link_to(folder.name, folder)].join(' ').html_safe
+    end).html_safe
+  end
 end
