@@ -22,7 +22,7 @@ class UploadsController < ApplicationController
   end
 
   def nginx_proxy
-    name = CGI.unescape(request.env["HTTP_CONTENT_DISPOSITION"][/"(.+)"/, 1])
+    name = request.env["HTTP_CONTENT_DISPOSITION"][/"(.+)"/, 1]
     file = File.open(File.join("tmp", request.env["HTTP_SESSION_ID"]), "ab")
     file.write request.env["rack.input"].read
     file.close

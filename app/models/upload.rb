@@ -9,6 +9,10 @@ class Upload < ActiveRecord::Base
 
   after_create :move_file
 
+  def name=(new_name)
+    self[:name] = CGI.unescape new_name.to_s
+  end
+
   def padded_id
     "%010d" % self.id
   end
