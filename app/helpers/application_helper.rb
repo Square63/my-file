@@ -1,9 +1,16 @@
 module ApplicationHelper
   def upload_icon(upload)
-    path = "/assets/file_types"
-    mime_minor = upload.mime_minor.present? && upload.mime_minor || "default"
-    image = File.join path, [mime_minor, "png"].join('.')
-    content_tag :img, nil, src: image, class: "backup_picture"
+    content_tag :img, nil, src: upload_icon_or_default_path_for(upload.mime_minor)
+  end
+
+  def upload_icon_path_for(name)
+    File.join "/assets/file_types", [name, "png"].join('.')
+  end
+
+  def upload_icon_or_default_path_for(name)
+    image = upload_icon_path_for(name)
+    image = upload_icon_path_for("default") unless File.exists?(File.join(Rails.root, "public", image))
+    image
   end
 
 end

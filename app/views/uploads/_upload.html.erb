@@ -1,7 +1,7 @@
 <div class="file <%= "new" if upload.new_record? %>">
   <div class="icon"><%= upload_icon(upload) %></div>
   <div class="name"><%= link_to upload.name, upload, target: "_blank" %></div>
-  <div class="size">(<%= number_to_human_size upload.size %>)</div>
+  <div class="size">(<span class="value"><%= number_to_human_size upload.size %></span>)</div>
   <div class="progress"></div>
   <div class="start"></div>
   <div class="cancel"></div>

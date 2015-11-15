@@ -8,7 +8,7 @@ $(function() {
   fileName, files, maxChunkSize, startAllUploads, startUpload, uploadedFilePath;
 
   // A container to hold all of the upload data objects.
-  files = [];
+  files = {};
 
   /*
    * A simple method to calculate the progress for an individual file upload.
@@ -28,6 +28,10 @@ $(function() {
 
   fileType = function(data) {
     return data.files[0].type;
+  };
+
+  fileSize = function(data) {
+    return data.files[0].size;
   };
 
   /*
@@ -78,6 +82,10 @@ $(function() {
     return '<span class="bar" style="width: ' + progress + '">' + progress + '</span>';
   };
 
+  humanFileSize = function(size) {
+    var i = Math.floor( Math.log(size) / Math.log(1024) );
+    return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['Bytes', 'KB', 'MB', 'GB', 'TB'][i];
+  };
 
   /*
    * IMPORTANT: There are some very important settings to mention:
@@ -108,9 +116,13 @@ $(function() {
       var progress = calculateProgress(data);
       var filename = fileName(data);
       var filetype = fileType(data);
+      var filesize = fileSize(data);
 
       // A count of the number of rows (current file uploads)
-      var index = $("#files .file.new").length;
+      var sessionID = new Date().getTime() + '_' 
+        + $.base64.encode(filename).replace(/\+|=|\//g, '');
+
+      var index = sessionID;
 
       // Create a start and stop button for this specific upload. The 'data-file' 
       // attribute is used to pass the index of this upload to the cancelUpload
@@ -137,13 +149,12 @@ $(function() {
       // to generate this token.
       //
       // Note: This will require you to use the jQuery base64 plugin.
-      var sessionID = new Date().getTime() + '_' 
-        + $.base64.encode(filename).replace(/\+|=|\//g, '');
 
       // Set all the information for this upload on the context (row) for easier
       // access
       $(row).find(".type").text(filetype);
       $(row).find(".name").text(filename);
+      $(row).find(".size .value").text(humanFileSize(filesize));
       $(row).find(".progress").html(createProgressBar(progress));
       $(row).find(".start").append(startButton);
       $(row).find(".cancel").append(cancelButton);
@@ -156,7 +167,7 @@ $(function() {
       data.context = row;
 
       // Add this upload data to our files container
-      files.push(data);
+      files[index] = data;
 
       startUpload(index);
     },
