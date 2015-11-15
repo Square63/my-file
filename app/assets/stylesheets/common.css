@@ -54,7 +54,7 @@ th {
   display: none;
 }
 
-.image-upload img {
+.file-add {
   width: 50px;
   cursor: pointer;
 }
