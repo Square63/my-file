@@ -45,3 +45,7 @@ td.cancel {
 th { 
   text-align: left;
 }
+
+#data-container {
+  display: none;
+}

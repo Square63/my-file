@@ -42,10 +42,10 @@ class Upload < ActiveRecord::Base
   end
 
   def mime_major
-    content_type.split('/').first
+    content_type.to_s.split('/').first
   end
 
   def mime_minor
-    content_type.split('/').last
+    content_type.to_s.split('/').last
   end
 end

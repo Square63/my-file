@@ -18,20 +18,23 @@ class UploadsController < ApplicationController
     @upload.user = current_user
     @upload.save
 
-    render text: {url: upload_path(@upload)}.to_json
+    render @upload
   end
 
   def nginx_proxy
-    file = Tempfile.new("nginx_proxy")
-    file.binmode
+    name = CGI.unescape(request.env["HTTP_CONTENT_DISPOSITION"][/"(.+)"/, 1])
+    file = File.open(File.join("tmp", request.env["HTTP_SESSION_ID"]), "ab")
     file.write request.env["rack.input"].read
     file.close
 
+    total, size = request.env["HTTP_CONTENT_RANGE"].to_s[/\d+\/\d+/].to_s.split("/")
+    return render(text: request.env["HTTP_CONTENT_RANGE"]).split(/\s+/).last if total && size && total.to_i + 1 != size.to_i
+
     params[:upload] = {
-      name: request.env["HTTP_CONTENT_DISPOSITION"][/"(.+)"/, 1],
+      name: name,
       path: file.path,
       content_type: request.env["CONTENT_TYPE"],
-      size: request.env["CONTENT_LENGTH"],
+      size: File.size(file.path),
     }
 
     create

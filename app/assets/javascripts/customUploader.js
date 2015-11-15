@@ -110,7 +110,7 @@ $(function() {
       var filetype = fileType(data);
 
       // A count of the number of rows (current file uploads)
-      var index = $("#files tr").length;
+      var index = $("#files .file.new").length;
 
       // Create a start and stop button for this specific upload. The 'data-file' 
       // attribute is used to pass the index of this upload to the cancelUpload
@@ -130,7 +130,7 @@ $(function() {
 
       // Create a new, empty row that will serve as the context for this file
       // upload.
-      var row = $('<tr><td class="filetype"></td><td class="filename"></td><td class="progress"></td><td class="start"></td><td class="cancel"></td>');
+      var row = $("#data-container .file").clone();
 
       // nginx requires us to specify a session id so that it can handle chunked
       // uploads. Here, we're using the current time and the file's encoded name 
@@ -142,8 +142,8 @@ $(function() {
 
       // Set all the information for this upload on the context (row) for easier
       // access
-      $(row).find(".filetype").text(filetype);
-      $(row).find(".filename").text(filename);
+      $(row).find(".type").text(filetype);
+      $(row).find(".name").text(filename);
       $(row).find(".progress").html(createProgressBar(progress));
       $(row).find(".start").append(startButton);
       $(row).find(".cancel").append(cancelButton);
@@ -166,13 +166,7 @@ $(function() {
      * bar we've been using with the path to the uploaded file on the server.
      */
     done: function(e, data) {
-      var name = data.context.find(".filename").text();
-      var url = uploadedFilePath(data);
-      var link = "<a target='_blank' href='" + url + "'>" + name + "<a/>";
-      data.context.find(".filename").html(link);
-      data.context.find(".start").html("");
-      data.context.find(".cancel").html("");
-      data.context.find(".progress");
+      data.context.replaceWith($(data.result));
     },
 
     /*

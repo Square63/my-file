@@ -1,20 +1,13 @@
+<% content_for :data_container do %>
+  <%= render Upload.new %>
+<% end %>
+
 <input id="fileupload" type="file" name="files[]" data-url="/upload" multiple>
 
 <button id="start_upload" type="button">Start all</button>
 <button id="stop_uploads" type="button">Cancel all</button>
 <span>Total progress: <span id="total_progress">0%</span></span>
 
-<table id="files">
-</table>
-
-<table>
-  <% @uploads.each do |upload| %>
-    <tr>
-      <td class="filetype"><%= raw upload_icon(upload) %> image/jpeg</td>
-      <td class="filename"><%= link_to upload.name, upload, target: "_blank" %></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  <% end %>
-</table>
+<div id="files">
+  <%= render @uploads %>
+</div>
