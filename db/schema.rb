@@ -15,10 +15,9 @@ ActiveRecord::Schema.define(version: 20151110014347) do
 
   create_table "uploads", force: true do |t|
     t.string   "name"
-    t.string   "content_type"
-    t.string   "path"
-    t.string   "md5"
-    t.integer  "size"
+    t.string   "content_type", limit: 32
+    t.string   "md5",          limit: 32
+    t.integer  "size",                    default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"

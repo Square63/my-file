@@ -1,4 +1,5 @@
 class Upload < ActiveRecord::Base
+  attr_accessor :path
 
   obfuscate_id :spin => 1021914
 
