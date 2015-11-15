@@ -154,7 +154,7 @@ $(function() {
       // access
       $(row).find(".type").text(filetype);
       $(row).find(".name").text(filename);
-      $(row).find(".size").text(humanFileSize(filesize));
+      $(row).find(".size .value").text(humanFileSize(filesize));
       $(row).find(".progress").html(createProgressBar(progress));
       $(row).find(".start").append(startButton);
       $(row).find(".cancel").append(cancelButton);
