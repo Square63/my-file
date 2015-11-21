@@ -12,5 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
-//= require_tree .
+//= require common
+//= require jquery.base64
+//= require jquery.file.ui.widget
+//= require jquery.fileupload.js
+//= require jquery.iframe-transport
+//= require customUploader

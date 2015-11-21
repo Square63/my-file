@@ -16,7 +16,10 @@ class FoldersController < ApplicationController
     @folder.parent = @parent
     @folder.save
 
-    redirect_to @folder.parent || @folder
+    respond_to do |format|
+      format.html {redirect_to @folder.parent || @folder}
+      format.js
+    end
   end
 
   private

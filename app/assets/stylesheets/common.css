@@ -10,7 +10,7 @@
   cursor: pointer;
 }
 
-.folder, .file, .folder-add, .file-add {
+.folder, .file {
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -21,4 +21,12 @@
 
 .folder, .file {
   margin-top: 0px;
+}
+
+.file-add, .folder-add {
+  float: right;
+}
+
+.file-add {
+  margin-left: 10px;
 }
