@@ -1,8 +1,18 @@
-<div class="folder col-md-2 media">
+<div id="folder-<%= folder.to_param %>" class="folder col-md-2 media">
   <div class="media-left">
-    <span class="icon"><%= link_to image_tag("folder.png"), folder %></span>
+    <span class="icon"><%= link_to image_tag("folder.png"), special_folder_path(folder) %></span>
   </div>
   <div class="media-body">
-    <div class="name media-heading"><%= link_to folder.name, folder %></div>
+    <div class="name media-heading">
+      <label class="folder-name"><%= folder.name %></label>
+      <%= form_for(folder, remote: true) do |f| %>
+        <%= f.text_field :name, class: "folder-name-text" %>
+      <% end %>
+    </div>
+    <div class="media-controls">
+      <%= link_to folder, method: :delete, remote: true, data: { confirm: "Are you sure you want to delete this folder?" }, class: "delete" do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </div>
   </div>
 </div>

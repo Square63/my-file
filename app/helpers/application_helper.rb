@@ -18,7 +18,7 @@ module ApplicationHelper
       link_to folders_path(parent_id: @folder), method: :post, remote: true, class: "btn btn-warning btn-sm add-btn" do
         capture do
           concat content_tag(:span, nil, class: "glyphicon glyphicon-folder-open")
-          concat " Add"
+          concat " &nbsp;New".html_safe
         end
       end
     end
@@ -30,7 +30,7 @@ module ApplicationHelper
         label_tag = content_tag(:label, for: "fileupload", class: "btn btn-success btn-sm add-btn") do
           capture do
             concat content_tag(:span, nil, class: "glyphicon glyphicon-file")
-            concat " Add"
+            concat " Upload"
           end
         end
         concat label_tag
@@ -55,7 +55,7 @@ module ApplicationHelper
       tag = content_tag(:li) do
         concat image_tag("folder-small.png")
         concat " "
-        concat link_to(folder.name, folder)
+        concat link_to(folder.name, special_folder_path(folder))
       end
       concat tag
     end

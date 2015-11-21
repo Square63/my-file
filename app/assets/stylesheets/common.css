@@ -21,12 +21,43 @@
 
 .folder, .file {
   margin-top: 0px;
+  height: 70px;
 }
 
 .file-add, .folder-add {
   float: right;
 }
 
+.file-add label, .folder-add a {
+  width: 80px;
+}
+
 .file-add {
   margin-left: 10px;
+}
+
+.media-controls {
+  display: none;
+}
+
+.folder-name {
+  width: 100%;
+  border: 1px solid #FFF;
+  height: 24px;
+  padding: 1px 1px 1px 2px;
+}
+
+.folder-name:hover {
+  background-color: white;
+  border: 1px solid #DDD;
+  -webkit-appearance: textfield;
+  background-color: white;
+  cursor: text;
+}
+
+.folder-name-text {
+  width: 100%;
+  display: none;
+  font-weight: bold;
+  height: 24px;
 }

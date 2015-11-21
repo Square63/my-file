@@ -1,5 +1,6 @@
 class FoldersController < ApplicationController
   before_filter :get_parent
+  before_filter :get_folder, only: [:show, :destroy, :update]
 
   def index
     @folder = current_user.folders.first || current_user.folders.create(name: "Main Folder")
@@ -22,7 +23,30 @@ class FoldersController < ApplicationController
     end
   end
 
+  def update
+    @folder.attributes = folder_params
+    @folder.save
+
+    respond_to do |format|
+      format.html {redirect_to @folder.parent || @folder}
+      format.js
+    end
+  end
+
+  def destroy
+    @folder.destroy
+
+    respond_to do |format|
+      format.html {redirect_to @folder.parent || root_path}
+      format.js
+    end
+  end
+
   private
+
+  def get_folder
+    @folder ||= Folder.find params[:id]
+  end
 
   def folder_params
     return {} if params[:folder].blank?

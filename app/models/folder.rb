@@ -12,6 +12,7 @@ class Folder < ActiveRecord::Base
 
   def find_uniq_name(counter = 1, batch_size=30)
     names = (counter..counter+batch_size).collect {|i| [name, i].join(' ')}
+    names.unshift(name) if counter == 1
     previous_names = self.class.where(parent_id: parent_id).where(name: names).collect(&:name)
     (names - previous_names).first || find_uniq_name(counter + batch_size)
   end

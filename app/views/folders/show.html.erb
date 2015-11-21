@@ -4,12 +4,11 @@
 
 <%= folder_breadcrumbs_for(@folder) %>
 
-
 <div class="row">
-  <div class="col-md-10">
-    <h3><%= link_to @folder.name, @folder %></h3>
+  <div class="col-md-9">
+    <h3><%= link_to @folder.name, special_folder_path(@folder) %></h3>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-3">
     <%= file_add_button %>
     <%= folder_add_button %>
   </div>

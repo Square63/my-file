@@ -1,4 +1,4 @@
-<div class="file col-md-2 media <%= "new" if upload.new_record? %>">
+<div id="file-<%= @upload.to_param %>" class="file col-md-2 media <%= "new" if upload.new_record? %>">
   <div class="media-left">
     <div class="icon"><%= link_to upload_icon(upload), download_path(upload), target: "_blank" %></div>
   </div>
