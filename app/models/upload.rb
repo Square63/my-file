@@ -1,17 +1,7 @@
-class Upload < ActiveRecord::Base
+class Upload < Item
   attr_accessor :path
 
-  obfuscate_id :spin => 1021914
-
-  validates_presence_of :folder
-
-  belongs_to :folder
-
   after_create :move_file
-
-  def name=(new_name)
-    self[:name] = CGI.unescape new_name.to_s
-  end
 
   def padded_id
     "%010d" % self.id

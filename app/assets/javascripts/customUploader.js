@@ -142,7 +142,7 @@ $(function() {
 
       // Create a new, empty row that will serve as the context for this file
       // upload.
-      var row = $("#data-container .file").clone();
+      var row = $("#data-container .item").clone();
 
       // nginx requires us to specify a session id so that it can handle chunked
       // uploads. Here, we're using the current time and the file's encoded name 
@@ -161,7 +161,7 @@ $(function() {
       $(row).attr("sessionID", sessionID);
 
       // Add the new file upload row to our list (table) of file uploads
-      $(row).appendTo("#files");
+      $(row).appendTo("#items");
 
       // Assign this row to this upload's context
       data.context = row;

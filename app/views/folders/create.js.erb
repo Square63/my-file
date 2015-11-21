@@ -1,4 +1,4 @@
-var folder = $("<%= raw escape_javascript(render @folder) %>");
+var folder = $("<%= raw escape_javascript(render 'items/item', {item: @folder}) %>");
 folder.hide();
-$("#folders").append(folder);
+$("#items").append(folder);
 folder.fadeIn();

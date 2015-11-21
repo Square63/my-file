@@ -10,7 +10,7 @@
   cursor: pointer;
 }
 
-.folder, .file {
+.item {
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -19,16 +19,16 @@
   font-size: 70%;
 }
 
-.folder, .file {
+.item {
   margin-top: 0px;
   height: 70px;
 }
 
-.file-add, .folder-add {
+.item-add {
   float: right;
 }
 
-.file-add label, .folder-add a {
+.file-add label, .item-add a {
   width: 80px;
 }
 
@@ -40,14 +40,14 @@
   display: none;
 }
 
-.folder-name {
+.item-name {
   width: 100%;
   border: 1px solid #FFF;
   height: 24px;
   padding: 1px 1px 1px 2px;
 }
 
-.folder-name:hover {
+.item-name:hover {
   background-color: white;
   border: 1px solid #DDD;
   -webkit-appearance: textfield;
@@ -55,7 +55,7 @@
   cursor: text;
 }
 
-.folder-name-text {
+.item-name-text {
   width: 100%;
   display: none;
   font-weight: bold;

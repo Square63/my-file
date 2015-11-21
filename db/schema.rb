@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115042013) do
+ActiveRecord::Schema.define(version: 20151121115655) do
 
   create_table "folders", force: true do |t|
     t.string   "name",       default: "Folder", null: false
+    t.integer  "user_id"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "items", force: true do |t|
+    t.string   "name",                    default: "Item", null: false
+    t.string   "content_type", limit: 32
+    t.string   "type",         limit: 8
+    t.string   "md5",          limit: 32
+    t.integer  "size",                    default: 0,      null: false
     t.integer  "user_id"
     t.integer  "parent_id"
     t.datetime "created_at"
