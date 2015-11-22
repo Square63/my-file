@@ -12,13 +12,10 @@
 
 .item {
   float: left;
-  width: 15%;
-  min-width: 100px;
   padding: 10px;
   margin-top: 0px;
   height: 110px;
   position: relative;
-  margin: 0px -5px 0px -5px;
 }
 
 .item-add {
