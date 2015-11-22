@@ -51,7 +51,6 @@ module ApplicationHelper
         tag = content_tag "span", class: "size" do
           "(#{number_to_human_size(folder.size)})"
         end
-        concat tag
       end
     end
   end
