@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Wall::Application.load_tasks
+MyFile::Application.load_tasks

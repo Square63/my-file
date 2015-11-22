@@ -1,4 +1,4 @@
-Wall::Application.configure do
+MyFile::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -75,6 +75,6 @@ Wall::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  config.action_mailer.default_url_options = {:host => "wall.cumulus.ws"}
+  config.action_mailer.default_url_options = {:host => "myfile.online"}
   config.action_mailer.delivery_method = :sendmail
 end

@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def page_title(title)
+    content_for :title, title
+  end
+
   def folder_add_button
     content_tag :div, class: "folder-add item-add" do
       link_to folders_path(parent_id: @item), method: :post, remote: true, class: "btn btn-warning btn-sm add-btn" do
