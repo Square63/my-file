@@ -42,7 +42,7 @@
 
 .item-name {
   width: 100%;
-  border: 1px solid #FFF;
+  border: 1px solid transparent;
   height: 24px;
   padding: 1px 1px 1px 2px;
 }

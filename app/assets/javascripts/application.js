@@ -18,3 +18,4 @@
 //= require jquery.fileupload.js
 //= require jquery.iframe-transport
 //= require customUploader
+//= require sortable

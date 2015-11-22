@@ -1,3 +1,11 @@
+reorder_items = ->
+  ids = $("#items .item").map ->
+    $(this).data("id")
+  .get().join(",")
+
+  $("#reorder-form").find("input[name=ids]").val(ids)
+  $("#reorder-form").submit();
+
 rename_item = (obj) ->
   parent = $(obj).parents(".item")
   label = parent.find(".item-name")
@@ -35,3 +43,11 @@ $(document).ready ->
     if (key_code == 13)
       rename_item this
       return false;
+
+  sortable = Sortable.create $("#items")[0],
+    group: "items",
+    animation: 500,
+    handle: ".image_icon",
+    draggable: ".item",
+    onUpdate: (e) ->
+      reorder_items()

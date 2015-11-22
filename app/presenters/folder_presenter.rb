@@ -1,12 +1,12 @@
 class FolderPresenter < ItemPresenter
   def items
-    @items ||= super.map do |item|
+    @items ||= super.ordered.map do |item|
       ItemPresenterFactory.for(item)
     end
   end
 
   def image_icon
-    image_tag("folder.png")
+    image_tag "folder.png", class: "image_icon"
   end
 
   def show_path

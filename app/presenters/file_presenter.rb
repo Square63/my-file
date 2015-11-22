@@ -10,10 +10,10 @@ class FilePresenter < ItemPresenter
   end
 
   def image_icon
-    content_tag :img, nil, src: file_icon_or_default_path_for(self.mime_minor)
+    content_tag :img, nil, src: file_icon_or_default_path_for(self.mime_minor), class: "image_icon"
   end
 
   def show_path
-    url_helpers.special_folder_path(item)
+    url_helpers.download_path(item)
   end
 end

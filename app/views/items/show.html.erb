@@ -15,6 +15,9 @@
 </div>
 
 <div class="row">
+  <%= form_tag reorder_items_path, remote: true, id: "reorder-form" do %>
+    <%= hidden_field_tag :ids %>
+  <% end %>
   <div id="items">
     <%= render @item.items %>
   </div>

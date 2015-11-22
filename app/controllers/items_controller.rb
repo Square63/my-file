@@ -27,10 +27,31 @@ class ItemsController < ApplicationController
     end
   end
 
+  def reorder
+    ids = params[:ids].split(",").collect { |id| item_id(id) }
+
+    items.find(ids).each do |item|
+      item.position = ids.index(item.id).to_i.next
+      item.save if item.position_changed?
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
+  def items
+    @items ||= current_user.items
+  end
+
   def get_item
-    @item ||= Item.find params[:id]
+    @item ||= items.find item_id(params[:id])
+  end
+
+  def item_id(id)
+    ObfuscateId.show(id, Item.obfuscate_id_spin).to_i
   end
 
   def item_params

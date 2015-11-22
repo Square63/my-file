@@ -7,7 +7,11 @@ Wall::Application.routes.draw do
   devise_for :users
   resources :uploads
   resources :folders
-  resources :items
+  resources :items do
+    collection do
+      post :reorder
+    end
+  end
 
   root "items#index"
 
