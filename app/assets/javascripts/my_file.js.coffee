@@ -11,7 +11,6 @@ MyFile.reload_sortable = ->
   MyFile.sortable = Sortable.create $("#items")[0],
     group: "items",
     animation: 500,
-    handle: ".image_icon",
     draggable: ".item",
     onUpdate: (e) ->
       MyFile.reorder_items()
