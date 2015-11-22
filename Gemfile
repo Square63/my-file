@@ -42,5 +42,5 @@ end
 
 # Use debugger
 gem 'byebug', group: [:development, :test]
-
+gem 'quiet_assets', group: [:development]
 gem 'devise'
