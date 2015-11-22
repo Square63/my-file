@@ -11,17 +11,19 @@
 }
 
 .item {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  float: left;
+  width: 15%;
+  min-width: 100px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 0px;
+  height: 110px;
+  position: relative;
+  margin-right: -9px;
 }
 
 .file .size {
   font-size: 70%;
-}
-
-.item {
-  margin-top: 0px;
-  height: 70px;
 }
 
 .item-add {
@@ -36,8 +38,10 @@
   margin-left: 10px;
 }
 
-.media-controls {
+.item-controls {
   display: none;
+  position: absolute;
+  right: 3px;
 }
 
 .item-name {
@@ -60,4 +64,27 @@
   display: none;
   font-weight: bold;
   height: 24px;
+}
+
+.item-image, .item-body {
+  text-align: center;
+}
+
+.item-delete {
+  color: #d9534f;
+}
+
+.folder-container {
+  width: 100%;
+  float: left;
+}
+
+.sortable-ghost {
+  background-color: #EEE;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
+
+.sortable-ghost .item-delete, .sortable-chosen .item-delete {
+  display: none;
 }

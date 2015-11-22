@@ -32,7 +32,7 @@ class ItemsController < ApplicationController
 
     items.find(ids).each do |item|
       item.position = ids.index(item.id).to_i.next
-      item.save if item.position_changed?
+      item.update_column(:position, item.position) if item.position_changed?
     end
 
     respond_to do |format|

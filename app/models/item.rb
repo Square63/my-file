@@ -6,7 +6,7 @@ class Item < ActiveRecord::Base
   belongs_to :user
   before_save :set_name, :set_position
   belongs_to :parent, class_name: "Item"
-  has_many :items, foreign_key: :parent_id
+  has_many :items, foreign_key: :parent_id, dependent: :destroy
   has_many :folders, -> { folder }, foreign_key: :parent_id
   has_many :uploads, -> { upload }, foreign_key: :parent_id
 
@@ -31,7 +31,7 @@ class Item < ActiveRecord::Base
 
   def set_name
     self.name = self.type.titleize if self.name.blank?
-    self.name = find_uniq_name if self.name_changed?
+    self.name = find_uniq_name
   end
 
   def set_position

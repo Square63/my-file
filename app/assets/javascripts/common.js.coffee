@@ -23,9 +23,9 @@ rename_item = (obj) ->
 
 $(document).ready ->
   $(".item").hover ->
-    $(this).find(".media-controls").fadeIn();
+    $(this).find(".item-controls").fadeIn();
   , ->
-    $(this).find(".media-controls").fadeOut();
+    $(this).find(".item-controls").fadeOut();
 
   $(".delete").on "click", ->
     $(this).parents(".item").fadeOut()

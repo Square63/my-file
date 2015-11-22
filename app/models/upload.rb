@@ -2,6 +2,7 @@ class Upload < Item
   attr_accessor :path
 
   after_create :move_file
+  after_destroy :delete_file
 
   def padded_id
     "%010d" % self.id
@@ -34,6 +35,10 @@ class Upload < Item
   def move_file
     FileUtils.mkdir_p full_target_dir
     FileUtils.mv path, full_target_path
+  end
+
+  def delete_file
+    FileUtils.rm full_target_path
   end
 
   def mime_major
