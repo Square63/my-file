@@ -10,16 +10,16 @@
   </div>
   <div class="item-body">
     <div class="name item-title">
-      <label class="item-name"><%= item.name %></label>
+      <div class="item-name"><%= item.name %></div>
       <%= form_for(item, remote: true) do |f| %>
-        <%= f.text_field :name, class: "item-name-text" %>
+        <%= f.text_area :name, class: "item-name-text" %>
       <% end %>
     </div>
-    <% if item.is_a?(Upload) %>
+    <% if item.is_a?(FilePresenter) %>
       <div class="size">(<span class="value"><%= number_to_human_size item.size %></span>)</div>
     <% end %>
   </div>
-  <% if item.is_a?(Upload) %>
+  <% if item.is_a?(FilePresenter) %>
     <div class="progress"></div>
     <div class="start"></div>
     <div class="cancel"></div>

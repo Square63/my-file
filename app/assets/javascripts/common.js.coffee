@@ -8,9 +8,9 @@ reorder_items = ->
 
 rename_item = (obj) ->
   parent = $(obj).parents(".item")
-  label = parent.find(".item-name")
+  name = parent.find(".item-name")
   new_text = parent.find(".item-name-text").val()
-  old_text = label.text()
+  old_text = name.text()
 
   unless new_text
     new_text = old_text
@@ -18,7 +18,7 @@ rename_item = (obj) ->
   if new_text != old_text
     parent.find(".edit_item").submit()
 
-  label.text(new_text).show()
+  name.text(new_text).show()
   $(obj).hide()
 
 $(document).ready ->

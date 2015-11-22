@@ -2,17 +2,12 @@
   <%= render FilePresenter.new(Upload.new) %>
 <% end %>
 
-<%= folder_breadcrumbs_for(@item) %>
-
-<div class="row">
-  <div class="col-md-9">
-    <h4><%= @item.name_link %></h4>
-  </div>
-  <div class="col-md-3">
-    <%= file_add_button %>
-    <%= folder_add_button %>
-  </div>
+<div class="item-buttons">
+  <%= file_add_button %>
+  <%= folder_add_button %>
 </div>
+
+<%= folder_breadcrumbs_for(@item) %>
 
 <div class="folder-container">
   <%= form_tag reorder_items_path, remote: true, id: "reorder-form" do %>

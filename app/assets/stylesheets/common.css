@@ -19,7 +19,6 @@
   margin-top: 0px;
   height: 110px;
   position: relative;
-  margin-right: -9px;
 }
 
 .file .size {
@@ -47,14 +46,15 @@
 .item-name {
   width: 100%;
   border: 1px solid transparent;
-  height: 24px;
   padding: 1px 1px 1px 2px;
+  height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-name:hover {
-  background-color: white;
   border: 1px solid #DDD;
-  -webkit-appearance: textfield;
   background-color: white;
   cursor: text;
 }
@@ -62,8 +62,8 @@
 .item-name-text {
   width: 100%;
   display: none;
-  font-weight: bold;
-  height: 24px;
+  text-align: center;
+  resize: none;
 }
 
 .item-image, .item-body {
@@ -80,11 +80,17 @@
 }
 
 .sortable-ghost {
-  background-color: #EEE;
-  border: 1px solid #DDD;
+  background-color: #FFFFE0;
+  border: 1px solid #FFFF00;
   border-radius: 5px;
 }
 
 .sortable-ghost .item-delete, .sortable-chosen .item-delete {
   display: none;
+}
+
+.item-buttons {
+  float: right;
+  margin-top: 4px;
+  margin-right: 4px;
 }

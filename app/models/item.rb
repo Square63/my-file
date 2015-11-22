@@ -26,7 +26,7 @@ class Item < ActiveRecord::Base
   end
 
   def find_next_position
-    self.class.where(parent_id: parent_id).maximum(:position).to_i.next
+    Item.where(parent_id: parent_id).maximum(:position).to_i.next
   end
 
   def set_name
