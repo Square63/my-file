@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_filter :get_item, only: [:show, :destroy, :update]
 
   def index
-    @folder = current_user.folders.first || current_user.folders.create(name: "Main Folder")
+    @folder = current_user.items.folder.first || current_user.items.folder.create(name: "Main Folder")
     redirect_to special_folder_path(@folder)
   end
 
