@@ -20,15 +20,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <%= link_to root_path, class: "navbar-brand" do %>
-        <%= image_tag "logo.png" %>
+      <%= link_to root_path, class: "navbar-brand logo" do %>
+        MyFile
       <% end %>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <% if user_signed_in? %>
+        <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><%= current_user.email %> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -37,12 +38,14 @@
             <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
           </ul>
         </li>
-      </ul>
+        </ul>
+      <% end %>
     </div>
   </div>
 </nav>
 
 <div id="main-container" class="container">
+  <%= render "layouts/messages" %>
   <%= yield %>
 </div>
 

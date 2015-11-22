@@ -23,13 +23,6 @@ module MyFile
     config.autoload_paths += %W(
       #{config.root}/app/presenters
     )
-
-    config.to_prepare do
-      Devise::SessionsController.layout "auth"
-      Devise::RegistrationsController.layout "auth"
-      Devise::ConfirmationsController.layout "auth"
-      Devise::PasswordsController.layout "auth"
-    end
   end
 end
 

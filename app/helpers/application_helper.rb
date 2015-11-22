@@ -1,4 +1,19 @@
 module ApplicationHelper
+  def alert_class(key)
+    k = key.to_s.sub('_stay', '')
+
+    {
+      "success" => "success",
+      "info" => "info",
+      "notice" => "success",
+      "warning" => "warning",
+      "alet" => "warning",
+      "danger" => "danger",
+      "error" => "danger",
+      "failure" => "danger",
+    }[k] || "warning"
+  end
+
   def page_title(title)
     content_for :title, title
   end
