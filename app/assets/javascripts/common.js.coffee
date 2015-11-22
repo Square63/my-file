@@ -1,3 +1,15 @@
+init_sortable = ->
+  if $("#items").length == 0
+    return false
+
+  sortable = Sortable.create $("#items")[0],
+  group: "items",
+  animation: 500,
+  handle: ".image_icon",
+  draggable: ".item",
+  onUpdate: (e) ->
+    reorder_items()
+
 reorder_items = ->
   ids = $("#items .item").map ->
     $(this).data("id")
@@ -44,10 +56,4 @@ $(document).ready ->
       rename_item this
       return false;
 
-  sortable = Sortable.create $("#items")[0],
-    group: "items",
-    animation: 500,
-    handle: ".image_icon",
-    draggable: ".item",
-    onUpdate: (e) ->
-      reorder_items()
+  init_sortable()
