@@ -1,4 +1,5 @@
-var folder = $("<%= raw escape_javascript(render 'items/item', {item: @folder}) %>");
+var folder = $("<%= raw escape_javascript(render @folder) %>");
 folder.hide();
 $("#items").append(folder);
 folder.fadeIn();
+MyFile.apply_js_item(folder);

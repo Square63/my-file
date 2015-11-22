@@ -48,6 +48,10 @@ module ApplicationHelper
     content_tag :ol, class: "breadcrumb" do
       capture do
         concat folder_breadcrumb_for(folder)
+        tag = content_tag "span", class: "size" do
+          "(#{number_to_human_size(folder.size)})"
+        end
+        concat tag
       end
     end
   end

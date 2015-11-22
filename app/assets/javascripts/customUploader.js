@@ -154,7 +154,6 @@ $(function() {
       // access
       $(row).find(".type").text(filetype);
       $(row).find(".name").text(filename);
-      $(row).find(".size .value").text(humanFileSize(filesize));
       $(row).find(".progress").html(createProgressBar(progress));
       $(row).find(".start").append(startButton);
       $(row).find(".cancel").append(cancelButton);
@@ -177,7 +176,10 @@ $(function() {
      * bar we've been using with the path to the uploaded file on the server.
      */
     done: function(e, data) {
-      data.context.replaceWith($(data.result));
+      file = $(data.result)
+      data.context.replaceWith(file);
+      MyFile.apply_js_item(file);
+
     },
 
     /*
