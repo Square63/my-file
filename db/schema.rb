@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151122001619) do
+ActiveRecord::Schema.define(version: 20151122051142) do
 
   create_table "folders", force: true do |t|
     t.string   "name",       default: "Folder", null: false
@@ -33,6 +33,9 @@ ActiveRecord::Schema.define(version: 20151122001619) do
     t.datetime "updated_at"
     t.integer  "position",                default: 0, null: false
   end
+
+  add_index "items", ["parent_id"], name: "index_items_on_parent_id"
+  add_index "items", ["user_id"], name: "index_items_on_user_id"
 
   create_table "uploads", force: true do |t|
     t.string   "name"
