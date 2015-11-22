@@ -33,10 +33,14 @@
   margin-left: 10px;
 }
 
-.item-controls {
+.item .item-controls {
   display: none;
   position: absolute;
   right: 3px;
+}
+
+.item.new .item-controls {
+  display: block;
 }
 
 .item-name {

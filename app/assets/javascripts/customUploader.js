@@ -48,7 +48,7 @@ $(function() {
    */
   cancelUpload = function(index) {
     if (files[index]) {
-      files[index].jqXHR.abort();
+      files[index].abort();
     }
   };
 
@@ -127,12 +127,18 @@ $(function() {
       // Create a start and stop button for this specific upload. The 'data-file' 
       // attribute is used to pass the index of this upload to the cancelUpload
       // and startUpload methods.
-      var cancelButton = $('<button type="button" data-file="' + index + '">Cancel</button>');
+      var cancelButton = $('<a href="#" class="delete" type="button" data-file="' + index + '"><span class="glyphicon glyphicon-remove item-delete"></span></a>');
       var startButton = $('<button type="button" data-file="' + index + '">Start</button>');
 
       // Cancel this specific upload when this button is clicked
       cancelButton.click(function() {
+        item = $(this).parents(".item");
+        item.addClass("cancelled");
         cancelUpload($(this).attr("data-file"));
+        item.fadeOut(function() {
+          $(this).remove();
+        });
+        return false;
       });
 
       // Start/Resume this specific upload when this button is clicked
@@ -156,7 +162,7 @@ $(function() {
       $(row).find(".name").text(filename);
       $(row).find(".progress").html(createProgressBar(progress));
       $(row).find(".start").append(startButton);
-      $(row).find(".cancel").append(cancelButton);
+      $(row).find(".item-controls").html(cancelButton);
       $(row).attr("sessionID", sessionID);
 
       // Add the new file upload row to our list (table) of file uploads
@@ -250,6 +256,9 @@ $(function() {
       
       // Get the context for this upload
       row = $(data.context[0]);
+
+      if(row.hasClass("cancelled"))
+        return;
 
       // Grab its current retry count
       retryCount = row.data("retries") || 1;
