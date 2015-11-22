@@ -15,11 +15,11 @@
         <%= f.text_area :name, class: "item-name-text" %>
       <% end %>
     </div>
-    <% if item.is_a?(FilePresenter) %>
-      <div class="size">(<span class="value"><%= number_to_human_size item.size %></span>)</div>
+    <% if item.persisted? %>
+      <div class="size"><span class="value"><%= number_to_human_size item.size %></span></div>
     <% end %>
   </div>
-  <% if item.is_a?(FilePresenter) %>
+  <% if item.is_a?(FilePresenter) && item.new_record? %>
     <div class="progress"></div>
     <div class="start"></div>
     <div class="cancel"></div>

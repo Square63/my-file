@@ -162,3 +162,9 @@
   background: transparent url("/assets/logo.png") no-repeat left center;
   padding-left: 40px;
 }
+
+.item .size {
+  font-size: 12px;
+  color: #AAA;
+  display: none;
+}

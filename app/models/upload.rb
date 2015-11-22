@@ -1,8 +1,8 @@
 class Upload < Item
   attr_accessor :path
 
-  after_create :move_file
-  after_destroy :delete_file
+  after_create :move_file, :increase_folder_size
+  after_destroy :delete_file, :decrease_folder_size
 
   def padded_id
     "%010d" % self.id
@@ -47,5 +47,13 @@ class Upload < Item
 
   def mime_minor
     content_type.to_s.split('/').last
+  end
+
+  def increase_folder_size
+    parent.increase_folder_size_by size
+  end
+
+  def decrease_folder_size
+    parent.decrease_folder_size_by size
   end
 end

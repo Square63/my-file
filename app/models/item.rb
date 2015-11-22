@@ -37,4 +37,14 @@ class Item < ActiveRecord::Base
   def set_position
     self.position = find_next_position if self.position.to_i.zero?
   end
+
+  def increase_folder_size_by(s)
+    self.update_column :size, self.size + s
+    parent.increase_folder_size_by(s) if parent
+  end
+
+  def decrease_folder_size_by(s)
+    self.update_column :size, self.size - s
+    parent.decrease_folder_size_by(s) if parent
+  end
 end
