@@ -1,7 +1,7 @@
 class Item < ActiveRecord::Base
   obfuscate_id :spin => 31010149
 
-  validates_presence_of :user_id, :type
+  validates_presence_of :name, :user_id, :type
 
   belongs_to :user
   before_save :set_name, :set_position

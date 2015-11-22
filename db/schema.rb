@@ -22,16 +22,16 @@ ActiveRecord::Schema.define(version: 20151122001619) do
   end
 
   create_table "items", force: true do |t|
-    t.string   "name",                    default: "Item", null: false
+    t.string   "name",                                null: false
     t.string   "content_type", limit: 32
     t.string   "type",         limit: 8
     t.string   "md5",          limit: 32
-    t.integer  "size",                    default: 0,      null: false
+    t.integer  "size",                    default: 0, null: false
     t.integer  "user_id"
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position",                default: 0,      null: false
+    t.integer  "position",                default: 0, null: false
   end
 
   create_table "uploads", force: true do |t|

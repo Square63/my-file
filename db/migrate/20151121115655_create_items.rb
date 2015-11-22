@@ -1,7 +1,7 @@
 class CreateItems < ActiveRecord::Migration
   def change
     create_table :items do |t|
-      t.string :name, null: false, default: "Item"
+      t.string :name, null: false
       t.string :content_type, limit: 32
       t.string :type, limit: 8
       t.string :md5, limit: 32
