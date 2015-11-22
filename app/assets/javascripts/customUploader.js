@@ -16,7 +16,7 @@ $(function() {
   calculateProgress = function(data) {
     var value;
     value = parseInt(data.loaded / data.total * 100, 10) || 0;
-    return value + "%";
+    return value;
   };
 
   /*
@@ -79,7 +79,7 @@ $(function() {
   };
 
   createProgressBar = function(progress) {
-    return '<span class="bar" style="width: ' + progress + '">' + progress + '</span>';
+    return '<div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar" aria-valuenow="' + progress + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + progress + '%"><span class="sr-only">' + progress + '% Complete</span></div>';
   };
 
   humanFileSize = function(size) {

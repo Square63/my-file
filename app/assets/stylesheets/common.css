@@ -168,3 +168,7 @@
   color: #AAA;
   display: none;
 }
+
+.item .status {
+  width: 100%;
+}
