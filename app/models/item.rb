@@ -47,4 +47,10 @@ class Item < ActiveRecord::Base
     self.update_column :size, self.size - s
     parent.decrease_folder_size_by(s) if parent
   end
+
+  def copy
+    item = self.class.new attributes
+    item.file_id = id
+    item
+  end
 end

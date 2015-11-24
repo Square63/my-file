@@ -2,10 +2,18 @@ class Upload < Item
   attr_accessor :path
 
   after_create :move_file, :increase_folder_size
-  after_destroy :delete_file, :decrease_folder_size
+  after_destroy :decrease_folder_size
+
+  def own_file?
+    !file_id?
+  end
+
+  def file_id_or_default
+    file_id || id
+  end
 
   def padded_id
-    "%010d" % self.id
+    "%010d" % file_id_or_default
   end
 
   def hashed_padded_id
@@ -33,6 +41,8 @@ class Upload < Item
   end
 
   def move_file
+    return unless own_file?
+
     FileUtils.mkdir_p full_target_dir
     FileUtils.mv path, full_target_path
   end

@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_filter :get_item, only: [:show, :destroy, :update]
+  before_filter :get_item, only: [:show, :destroy, :update, :copy]
 
   def index
     @folder = current_user.main_folder
@@ -21,6 +21,17 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.destroy
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def copy
+    @item = @item.copy
+    @item.user = current_user
+
+    @item.save
 
     respond_to do |format|
       format.js
