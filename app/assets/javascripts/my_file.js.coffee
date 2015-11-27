@@ -12,6 +12,7 @@ MyFile.reload_sortable = ->
     group: "items",
     animation: 500,
     draggable: ".item",
+    handle: ".icon",
     onUpdate: (e) ->
       MyFile.reorder_items()
 
@@ -38,13 +39,11 @@ MyFile.rename_item = (obj) ->
   name.text(new_text).show()
   $(obj).hide()
 
+MyFile.apply_right_click = (obj) ->
+  return
+
 MyFile.apply_js_item = (obj) ->
-  obj.hover ->
-    $(this).find(".item-controls").fadeIn();
-    $(this).find(".size").fadeIn();
-  , ->
-    $(this).find(".item-controls").fadeOut();
-    $(this).find(".size").fadeOut();
+  MyFile.apply_right_click obj
 
   obj.find(".delete").on "click", ->
     $(this).parents(".item").fadeOut()

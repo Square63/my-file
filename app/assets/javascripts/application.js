@@ -13,10 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require common
-//= require my_file
 //= require jquery.base64
 //= require jquery.file.ui.widget
 //= require jquery.fileupload.js
 //= require jquery.iframe-transport
 //= require customUploader
 //= require sortable
+//= require my_file

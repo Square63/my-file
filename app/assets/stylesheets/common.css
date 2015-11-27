@@ -16,6 +16,7 @@
   margin-top: 0px;
   height: 110px;
   position: relative;
+  border: 1px solid transparent;
 }
 
 .item-add {
@@ -161,9 +162,8 @@
 }
 
 .item .size {
-  font-size: 12px;
+  font-size: 10px;
   color: #AAA;
-  display: none;
 }
 
 .item .status {
