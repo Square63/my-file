@@ -39,8 +39,28 @@ MyFile.rename_item = (obj) ->
   name.text(new_text).show()
   $(obj).hide()
 
-MyFile.apply_right_click = (obj) ->
-  return
+MyFile.menu_icon = (image) ->
+  "/assets/menu/#{image}.png"
+
+MyFile.apply_right_click = (objs) ->
+  objs.each ->
+    obj = $(this)
+    obj.find('.icon').contextmenu
+      onContextMenu: true
+      alias: "menu-#{obj.attr("id")}"
+      width: 150
+      items: [
+        {
+          text: "Open"
+          icon: MyFile.menu_icon("open")
+          alias: obj.attr("id")
+          action: ->
+            window.ali = this
+            item = $("##{this.data.alias}")
+            location.href = item.data("url")
+        }
+        { type: 'splitLine' }
+      ]
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
@@ -63,5 +83,5 @@ MyFile.apply_js_item = (obj) ->
       return false;
 
 $(document).ready ->
-  MyFile.apply_js_item $(".item")
+  MyFile.apply_js_item $(".item.real")
   MyFile.reload_sortable()

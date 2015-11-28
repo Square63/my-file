@@ -1,4 +1,4 @@
-<div id="<%= item.view_id %>" class="item <%= "new" if item.new_record? %> col-xs-4 col-sm-3 col-md-3 col-lg-2" data-id="<%= item.to_param %>">
+<div id="<%= item.view_id %>" class="item <%= item.new_record? && "new" || "real" %> col-xs-4 col-sm-3 col-md-3 col-lg-2" data-id="<%= item.to_param %>" data-url="<%= item.show_path %>">
   <div class="item-controls">
     <%= link_to item, method: :delete, remote: true, data: { confirm: "Are you sure you want to delete this #{item.type}?" }, class: "delete" do %>
       <span class="glyphicon glyphicon-remove item-delete"></span>

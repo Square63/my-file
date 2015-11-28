@@ -17,6 +17,7 @@
 //= require jquery.file.ui.widget
 //= require jquery.fileupload.js
 //= require jquery.iframe-transport
+//= require jquery.contextmenu
 //= require customUploader
 //= require sortable
 //= require my_file
