@@ -128,6 +128,15 @@ MyFile.apply_right_click = (objs) ->
           obj.fadeOut()
           obj.find(".delete").click()
 
+    items.push type: 'splitLine'
+
+    items.push
+      text: "Properties"
+      icon: MyFile.menu_icon("properties")
+      alias: "properties"
+      action: ->
+        obj.find(".properties").modal()
+
     obj.find('.icon').contextmenu
       onContextMenu: true
       alias: "menu-#{obj.attr("id")}"

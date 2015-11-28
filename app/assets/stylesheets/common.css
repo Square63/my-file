@@ -175,3 +175,7 @@
   color: #AAA;
   padding-left: 5px;
 }
+
+.properties {
+  display: none;
+}

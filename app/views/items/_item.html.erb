@@ -24,6 +24,20 @@
     <div class="cancel"></div>
   <% end %>
 
+  <div class="modal fade properties" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"><%= item.name %></h4>
+        </div>
+        <div class="modal-body">
+          Size: <%= number_to_human_size item.size %>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <%= form_for(item, url: cut_item_path(item), html: {class: "cut_form"}, remote: true) do |f| %>
     <%= f.hidden_field :parent_id, class: "item-parent-id" %>
   <% end %>
