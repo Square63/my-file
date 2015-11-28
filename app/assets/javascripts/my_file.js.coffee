@@ -1,5 +1,10 @@
 window.MyFile = {}
 
+MyFile.store_cookie = "store"
+MyFile.current_item_id = null
+
+$.cookie.json = true;
+
 MyFile.reload_sortable = ->
   if $("#items").length == 0
     return false
@@ -42,24 +47,82 @@ MyFile.rename_item = (obj) ->
 MyFile.menu_icon = (image) ->
   "/assets/menu/#{image}.png"
 
+MyFile.store = (obj, action) ->
+  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action}, {path: "/"}
+
+MyFile.cut = (obj) ->
+  MyFile.store obj, "cut"
+
+MyFile.copy = (obj) ->
+  MyFile.store obj, "copy"
+
 MyFile.apply_right_click = (objs) ->
   objs.each ->
     obj = $(this)
+
+    items = []
+
+    items.push
+      text: "Open"
+      icon: MyFile.menu_icon("open")
+      alias: "open"
+      item: obj
+      action: ->
+        location.href = this.data.item.data("url")
+
+    items.push
+      type: 'splitLine'
+
+    items.push
+      text: "Cut"
+      icon: MyFile.menu_icon("cut")
+      alias: "cut"
+      item: obj
+      action: ->
+        MyFile.cut obj
+
+    items.push
+      text: "Copy"
+      icon: MyFile.menu_icon("copy")
+      alias: "copy"
+      item: obj
+      action: ->
+        MyFile.copy obj
+
+    if obj.data("type") == "folder"
+      items.push
+        text: "Paste"
+        icon: MyFile.menu_icon("paste")
+        alias: "paste"
+        item: obj
+        action: ->
+          store = $.cookie(MyFile.store_cookie)
+          unless store
+            return
+
+          parent = $("##{store.id}")
+
+          switch store.action
+            when "cut"
+              parent.fadeOut()
+              form = parent.find(".cut_form")
+              form.find(".item-parent-id").val this.data.item.data("id")
+              form.submit()
+            when "copy"
+              form = parent.find(".copy_form")
+              form.find(".item-parent-id").val this.data.item.data("id")
+              form.submit()
+
+            else console.log "Unknown action #{store.action}"
+
+
     obj.find('.icon').contextmenu
       onContextMenu: true
       alias: "menu-#{obj.attr("id")}"
       width: 150
-      items: [
-        {
-          text: "Open"
-          icon: MyFile.menu_icon("open")
-          alias: obj.attr("id")
-          action: ->
-            item = $("##{this.data.alias}")
-            location.href = item.data("url")
-        }
-        { type: 'splitLine' }
-      ]
+      items: items
+      onShow: (menu) ->
+        menu.disable "paste", !$.cookie(MyFile.store_cookie)
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj

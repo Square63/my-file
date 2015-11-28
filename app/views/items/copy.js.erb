@@ -1,5 +1,8 @@
 var item = $("<%= raw escape_javascript(render @item) %>");
-item.hide();
-$("#items").append(item);
-item.fadeIn();
-MyFile.apply_js_item(item);
+
+if(item.data("parent_id") == MyFile.current_item_id) {
+  item.hide();
+  $("#items").append(item);
+  item.fadeIn();
+  MyFile.apply_js_item(item);
+}

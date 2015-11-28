@@ -136,7 +136,9 @@
         };
         function disable(alias, disabled) {
             var item = mitems[alias];
-            item.className = (item.disable = item.lastChild.disabled = disabled) ? "b-m-idisable" : "b-m-item";
+            if(item) {
+                item.className = (item.disable = item.lastChild.disabled = disabled) ? "b-m-idisable" : "b-m-item";
+            }
         };
 
         /* to show menu  */
@@ -151,6 +153,7 @@
             root = buildGroup.apply(gTemplet.clone()[0], [option]);
             root.applyrule = applyRule;
             root.showMenu = showMenu;
+            root.disable = disable;
             addItems(option.alias, option.items);
         }
         else {

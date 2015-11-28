@@ -1,7 +1,11 @@
 <% page_title @item.name %>
 
-<% content_for :data_container do %>
-  <%= render FilePresenter.new(Upload.new) %>
+<%= content_for :data_container do %>
+  <% render FilePresenter.new(Upload.new) %>
+<% end %>
+
+<%= content_for :javascript do %>
+  MyFile.current_item_id = "<%= @item.to_param %>";
 <% end %>
 
 <div class="item-buttons">

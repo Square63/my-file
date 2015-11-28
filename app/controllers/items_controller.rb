@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_filter :get_item, only: [:show, :destroy, :update, :copy]
+  before_filter :get_item, only: [:show, :destroy, :update, :cut, :copy]
 
   def index
     @folder = current_user.main_folder
@@ -7,7 +7,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = ItemPresenterFactory.for(@item)
   end
 
   def update
@@ -27,11 +26,25 @@ class ItemsController < ApplicationController
     end
   end
 
+  def cut
+    @parent = Item.find params[:item][:parent_id]
+    @item.parent = @parent
+    @item.save
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def copy
+    @parent = Item.find params[:item][:parent_id]
     @item = @item.copy
     @item.user = current_user
+    @item.parent = @parent
 
     @item.save
+
+    @item = ItemPresenterFactory.for @item
 
     respond_to do |format|
       format.js
@@ -58,7 +71,7 @@ class ItemsController < ApplicationController
   end
 
   def get_item
-    @item ||= items.find item_id(params[:id])
+    @item ||= ItemPresenterFactory.for(items.find(item_id(params[:id])))
   end
 
   def item_id(id)

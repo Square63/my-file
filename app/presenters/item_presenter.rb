@@ -16,7 +16,7 @@ class ItemPresenter < SimpleDelegator
   end
 
   def view_id
-    [self.type.downcase, self.to_param].join("-")
+    ["item", self.to_param].join("-")
   end
 
   def to_partial_path

@@ -11,6 +11,10 @@ MyFile::Application.routes.draw do
     collection do
       post :reorder
     end
+    member do
+      patch :cut
+      patch :copy
+    end
   end
 
   root "items#index"
