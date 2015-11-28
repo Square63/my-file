@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require common
 //= require jquery.base64
+//= require jquery.cookie.js
 //= require jquery.file.ui.widget
 //= require jquery.fileupload.js
 //= require jquery.iframe-transport
