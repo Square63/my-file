@@ -70,8 +70,7 @@ MyFile.apply_right_click = (objs) ->
       action: ->
         location.href = this.data.item.data("url")
 
-    items.push
-      type: 'splitLine'
+    items.push type: 'splitLine'
 
     items.push
       text: "Cut"
@@ -115,6 +114,25 @@ MyFile.apply_right_click = (objs) ->
 
             else console.log "Unknown action #{store.action}"
 
+    items.push type: 'splitLine'
+
+    items.push
+      text: "Rename"
+      icon: MyFile.menu_icon("rename")
+      alias: "rename"
+      item: obj
+      action: ->
+        obj.find(".item-name").click()
+
+    items.push
+      text: "Delete"
+      icon: MyFile.menu_icon("delete")
+      alias: "delete"
+      item: obj
+      action: ->
+        if confirm "Are you sure you want to delete this?"
+          obj.fadeOut()
+          obj.find(".delete").click()
 
     obj.find('.icon').contextmenu
       onContextMenu: true
@@ -122,13 +140,14 @@ MyFile.apply_right_click = (objs) ->
       width: 150
       items: items
       onShow: (menu) ->
-        menu.disable "paste", !$.cookie(MyFile.store_cookie)
+        store = $.cookie(MyFile.store_cookie)
+        if store && $("##{store.id}").length
+          menu.disable "paste", false
+        else
+          menu.disable "paste", true
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
-
-  obj.find(".delete").on "click", ->
-    $(this).parents(".item").fadeOut()
 
   obj.find(".item-name").on "click", ->
     $(this).hide().parents(".item").find(".item-name-text").show().focus().select()

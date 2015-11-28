@@ -1,6 +1,6 @@
 class FolderPresenter < ItemPresenter
   def items
-    @items ||= super.ordered.map do |item|
+    @items ||= super.includes(:parent).ordered.map do |item|
       ItemPresenterFactory.for(item)
     end
   end
