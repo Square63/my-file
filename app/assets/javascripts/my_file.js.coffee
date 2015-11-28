@@ -66,9 +66,8 @@ MyFile.apply_right_click = (objs) ->
       text: "Open"
       icon: MyFile.menu_icon("open")
       alias: "open"
-      item: obj
       action: ->
-        location.href = this.data.item.data("url")
+        location.href = obj.data("url")
 
     items.push type: 'splitLine'
 
@@ -76,7 +75,6 @@ MyFile.apply_right_click = (objs) ->
       text: "Cut"
       icon: MyFile.menu_icon("cut")
       alias: "cut"
-      item: obj
       action: ->
         MyFile.cut obj
 
@@ -84,7 +82,6 @@ MyFile.apply_right_click = (objs) ->
       text: "Copy"
       icon: MyFile.menu_icon("copy")
       alias: "copy"
-      item: obj
       action: ->
         MyFile.copy obj
 
@@ -93,7 +90,6 @@ MyFile.apply_right_click = (objs) ->
         text: "Paste"
         icon: MyFile.menu_icon("paste")
         alias: "paste"
-        item: obj
         action: ->
           store = $.cookie(MyFile.store_cookie)
           unless store
@@ -105,11 +101,11 @@ MyFile.apply_right_click = (objs) ->
             when "cut"
               parent.fadeOut()
               form = parent.find(".cut_form")
-              form.find(".item-parent-id").val this.data.item.data("id")
+              form.find(".item-parent-id").val obj.data("id")
               form.submit()
             when "copy"
               form = parent.find(".copy_form")
-              form.find(".item-parent-id").val this.data.item.data("id")
+              form.find(".item-parent-id").val obj.data("id")
               form.submit()
 
             else console.log "Unknown action #{store.action}"
@@ -120,7 +116,6 @@ MyFile.apply_right_click = (objs) ->
       text: "Rename"
       icon: MyFile.menu_icon("rename")
       alias: "rename"
-      item: obj
       action: ->
         obj.find(".item-name").click()
 
@@ -128,7 +123,6 @@ MyFile.apply_right_click = (objs) ->
       text: "Delete"
       icon: MyFile.menu_icon("delete")
       alias: "delete"
-      item: obj
       action: ->
         if confirm "Are you sure you want to delete this?"
           obj.fadeOut()
@@ -141,7 +135,7 @@ MyFile.apply_right_click = (objs) ->
       items: items
       onShow: (menu) ->
         store = $.cookie(MyFile.store_cookie)
-        if store && $("##{store.id}").length
+        if store && $("##{store.id}").length && store.id != obj.attr("id")
           menu.disable "paste", false
         else
           menu.disable "paste", true
