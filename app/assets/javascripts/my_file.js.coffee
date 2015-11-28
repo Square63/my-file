@@ -55,7 +55,6 @@ MyFile.apply_right_click = (objs) ->
           icon: MyFile.menu_icon("open")
           alias: obj.attr("id")
           action: ->
-            window.ali = this
             item = $("##{this.data.alias}")
             location.href = item.data("url")
         }
