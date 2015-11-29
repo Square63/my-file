@@ -47,7 +47,7 @@ MyFile.rename_item = (obj) ->
   $(obj).hide()
 
 MyFile.menu_icon = (image) ->
-  "/assets/menu/#{image}.png"
+  "/assets/images/menu/#{image}.png"
 
 MyFile.store = (obj, action) ->
   $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action}, {path: "/"}

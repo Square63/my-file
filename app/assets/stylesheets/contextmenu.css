@@ -1,5 +1,5 @@
 ﻿.b-m-mpanel {
-	background: #F0F0F0 url(/assets/menu/menu_bg.gif) left repeat-y;
+	background: #F0F0F0 url(/assets/images/menu/menu_bg.gif) left repeat-y;
 	border: 1px solid #718BB7;
 	padding: 2px 0;
 	position: absolute;
@@ -9,7 +9,7 @@
 }
 .b-m-split {
 	height: 6px;
-	background: url(/assets/menu/m_splitLine.gif) center repeat-x;
+	background: url(/assets/images/menu/m_splitLine.gif) center repeat-x;
 	font-size: 0px;
 	margin: 0 2px;
 }
@@ -34,7 +34,7 @@
 }
 
 .b-m-arrow {
-	background: url(/assets/menu/m_arrow.gif) right  no-repeat;	
+	background: url(/assets/images/menu/m_arrow.gif) right  no-repeat;	
 }
 .b-m-idisable .b-m-arrow
 {
@@ -44,7 +44,7 @@
 	margin-right: 8px;
 }
 .b-m-ifocus {
-	background: url(/assets/menu/m_item.gif) repeat-x bottom;
+	background: url(/assets/images/menu/m_item.gif) repeat-x bottom;
 	border: 1px solid #AACCF6;
 	padding: 3px 1px ;
     margin: 0 2px 0 3px;
