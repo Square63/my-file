@@ -1,3 +1,8 @@
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
 #data-container {
   display: none;
 }
@@ -66,6 +71,12 @@
 
 .item-image, .item-body {
   text-align: center;
+}
+
+.item-image .icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
 }
 
 .item-delete {

@@ -146,6 +146,7 @@
             target = menutarget;
             showMenuGroup.call(groups[this.id], { left: e.pageX, top: e.pageY }, 0);
             $(document).one('mousedown', hideMenuPane);
+            $(document).one('touchdown', hideMenuPane);
         }
         var $root = $("#" + option.alias);
         var root = null;
@@ -160,7 +161,11 @@
             root = $root[0];
         }
         var me = $(this).each(function() {
-            return $(this).bind('contextmenu', function(e) {
+            return $(this).bind('contextmenu', function(e, f) {
+                if(f) {
+                    e.pageX = f.pageX;
+                    e.pageY = f.pageY;
+                }
                 var bShowContext = (option.onContextMenu && $.isFunction(option.onContextMenu)) ? option.onContextMenu.call(this, e) : true;
                 if (bShowContext) {
                     if (option.onShow && $.isFunction(option.onShow)) {

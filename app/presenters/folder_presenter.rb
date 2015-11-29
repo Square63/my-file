@@ -9,6 +9,10 @@ class FolderPresenter < ItemPresenter
     image_tag "folder.png", class: "image_icon"
   end
 
+  def image_full_path
+    "/assets/folder.png"
+  end
+
   def show_path
     url_helpers.special_folder_path(item)
   end

@@ -2,6 +2,8 @@ window.MyFile = {}
 
 MyFile.store_cookie = "store"
 MyFile.current_item_id = null
+MyFile.touchdown_timeout = 500
+MyFile.touchdown_timer = null
 
 $.cookie.json = true;
 
@@ -149,6 +151,31 @@ MyFile.apply_right_click = (objs) ->
         else
           menu.disable "paste", true
 
+    obj.find(".icon").on "mousedown", (e) ->
+      MyFile.show_menu obj, e
+    .on "mouseup", (e) ->
+      MyFile.menu_cancelled obj, e
+
+    obj.find(".icon").on "touchstart", (e) ->
+      touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+      MyFile.show_menu obj, touch
+    .on "touchend", (e) ->
+      touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+      MyFile.menu_cancelled obj, touch
+
+MyFile.show_menu = (obj, e) ->
+  return if e.button == 2
+  MyFile.touchdown_timer = setTimeout ->
+    MyFile.touchdown_timer = null
+    obj.find(".icon").trigger "contextmenu", e
+  , MyFile.touchdown_timeout
+
+MyFile.menu_cancelled = (obj, e) ->
+  if MyFile.touchdown_timer
+    clearTimeout MyFile.touchdown_timer
+    location.href = obj.data("url")
+  MyFile.touchdown_timer = null
+
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
 
@@ -164,7 +191,7 @@ MyFile.apply_js_item = (obj) ->
 
     if (key_code == 13)
       MyFile.rename_item this
-      return false;
+      false
 
 $(document).ready ->
   MyFile.apply_js_item $(".item.real")
