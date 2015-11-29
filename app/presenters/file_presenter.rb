@@ -1,6 +1,6 @@
 class FilePresenter < ItemPresenter
   def file_icon_path_for(name)
-    File.join "/assets/file_types", [name, "png"].join('.')
+    File.join "/assets/images/file_types", [name, "png"].join('.')
   end
 
   def file_icon_or_default_path_for(name)

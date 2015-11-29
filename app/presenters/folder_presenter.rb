@@ -10,7 +10,7 @@ class FolderPresenter < ItemPresenter
   end
 
   def image_full_path
-    "/assets/folder.png"
+    "/assets/images/folder.png"
   end
 
   def show_path
