@@ -1,6 +1,6 @@
 var item = $("<%= raw escape_javascript(render @item) %>");
 
-if(item.data("parent_id") == MyFile.current_item_id) {
+if(item.data("parentId") == MyFile.current_item_id) {
   item.hide();
   $("#items").append(item);
   item.fadeIn();

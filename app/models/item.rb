@@ -50,7 +50,7 @@ class Item < ActiveRecord::Base
 
   def copy
     item = self.class.new attributes
-    item.id = nil
+    item.id = item.position = nil
     item.file_id = id
     item
   end

@@ -146,7 +146,7 @@
             target = menutarget;
             showMenuGroup.call(groups[this.id], { left: e.pageX, top: e.pageY }, 0);
             $(document).one('mousedown', hideMenuPane);
-            $(document).one('touchdown', hideMenuPane);
+            $(document).one('touchcancel', hideMenuPane);
         }
         var $root = $("#" + option.alias);
         var root = null;

@@ -58,6 +58,26 @@ MyFile.cut = (obj) ->
 MyFile.copy = (obj) ->
   MyFile.store obj, "copy"
 
+MyFile.paste = (id) ->
+  store = $.cookie MyFile.store_cookie
+  return unless store
+
+  parent = $("##{store.id}")
+
+  switch store.action
+    when "cut"
+      parent.fadeOut()
+      form = parent.find(".cut_form")
+      form.find(".item-parent-id").val id
+      form.submit()
+      $.removeCookie MyFile.store_cookie, path: "/"
+    when "copy"
+      form = parent.find(".copy_form")
+      form.find(".item-parent-id").val id
+      form.submit()
+
+    else console.log "Unknown action #{store.action}"
+
 MyFile.apply_right_click = (objs) ->
   objs.each ->
     obj = $(this)
@@ -93,24 +113,7 @@ MyFile.apply_right_click = (objs) ->
         icon: MyFile.menu_icon("paste")
         alias: "paste"
         action: ->
-          store = $.cookie(MyFile.store_cookie)
-          unless store
-            return
-
-          parent = $("##{store.id}")
-
-          switch store.action
-            when "cut"
-              parent.fadeOut()
-              form = parent.find(".cut_form")
-              form.find(".item-parent-id").val obj.data("id")
-              form.submit()
-            when "copy"
-              form = parent.find(".copy_form")
-              form.find(".item-parent-id").val obj.data("id")
-              form.submit()
-
-            else console.log "Unknown action #{store.action}"
+          MyFile.paste obj.data("id")
 
     items.push type: 'splitLine'
 
@@ -152,28 +155,32 @@ MyFile.apply_right_click = (objs) ->
           menu.disable "paste", true
 
     obj.find(".icon").on "mousedown", (e) ->
-      MyFile.show_menu obj, e
+      MyFile.show_menu obj.find(".icon"), e
     .on "mouseup", (e) ->
       MyFile.menu_cancelled obj, e
 
     obj.find(".icon").on "touchstart", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-      MyFile.show_menu obj, touch
+      MyFile.show_menu obj.find(".icon"), touch
     .on "touchend", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
       MyFile.menu_cancelled obj, touch
+
+MyFile.dump = (s) ->
+  JSON.stringify s, null, "\t"
 
 MyFile.show_menu = (obj, e) ->
   return if e.button == 2
   MyFile.touchdown_timer = setTimeout ->
     MyFile.touchdown_timer = null
-    obj.find(".icon").trigger "contextmenu", e
+    obj.trigger "contextmenu", e
   , MyFile.touchdown_timeout
 
 MyFile.menu_cancelled = (obj, e) ->
   if MyFile.touchdown_timer
     clearTimeout MyFile.touchdown_timer
-    location.href = obj.data("url")
+    url = obj.data("url")
+    location.href = url if url
   MyFile.touchdown_timer = null
 
 MyFile.apply_js_item = (obj) ->
@@ -193,6 +200,65 @@ MyFile.apply_js_item = (obj) ->
       MyFile.rename_item this
       false
 
+MyFile.init_main_right_click = ->
+  obj = $("#items")
+
+  items = []
+
+  items.push
+    text: "Refresh"
+    icon: MyFile.menu_icon("refresh")
+    alias: "refresh"
+    action: ->
+      false
+
+  items.push type: 'splitLine'
+
+  items.push
+      text: "Paste"
+      icon: MyFile.menu_icon("paste")
+      alias: "paste"
+      action: ->
+        MyFile.paste MyFile.current_item_id
+
+  items.push type: 'splitLine'
+
+  items.push
+    text: "Properties"
+    icon: MyFile.menu_icon("properties")
+    alias: "properties"
+    action: ->
+      console.log "Properties"
+
+  obj.contextmenu
+    onContextMenu: true
+    alias: "menu-main"
+    width: 150
+    items: items
+    onShow: (menu) ->
+      store = $.cookie(MyFile.store_cookie)
+      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut" && store.id == MyFile.current_item_id)
+        menu.disable "paste", false
+      else
+        menu.disable "paste", true
+
+  obj.on "mousedown", (e) ->
+    return if $(e.target).parents(".item-container").length
+    MyFile.show_menu obj, e
+  .on "mouseup", (e) ->
+    return if $(e.target).parents(".item-container").length
+    MyFile.menu_cancelled obj, e
+
+  obj.on "touchstart", (e) ->
+    return if $(e.target).parents(".item-container").length
+    touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+    MyFile.show_menu obj, touch
+  .on "touchend", (e) ->
+    return if $(e.target).parents(".item-container").length
+    touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+    MyFile.menu_cancelled obj, touch
+
 $(document).ready ->
   MyFile.apply_js_item $(".item.real")
   MyFile.reload_sortable()
+  MyFile.init_main_right_click()

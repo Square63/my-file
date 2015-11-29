@@ -1,48 +1,50 @@
 <div id="<%= item.view_id %>" class="item <%= item.new_record? && "new" || "real" %> col-xs-4 col-sm-3 col-md-3 col-lg-2" data-id="<%= item.to_param %>" data-parent-id="<%= item.parent.try :to_param %>" data-url="<%= item.show_path %>" data-type="<%= item.type.downcase %>">
-  <div class="item-controls">
-    <%= link_to item, method: :delete, remote: true, class: "delete" do %>
-      <span class="glyphicon glyphicon-remove item-delete"></span>
-    <% end %>
-  </div>
-
-  <div class="item-image">
-    <span class="icon" style="background-image: url(<%= item.image_full_path %>);"></span>
-  </div>
-  <div class="item-body">
-    <div class="name item-title">
-      <div class="item-name"><%= item.name %></div>
-      <%= form_for(item, remote: true) do |f| %>
-        <%= f.text_area :name, class: "item-name-text" %>
+  <div class="item-container">
+    <div class="item-controls">
+      <%= link_to item, method: :delete, remote: true, class: "delete" do %>
+        <span class="glyphicon glyphicon-remove item-delete"></span>
       <% end %>
     </div>
-    <% if item.persisted? %>
-      <div class="size"><span class="value"><%= number_to_human_size item.size %></span></div>
-    <% end %>
-  </div>
-  <% if item.is_a?(FilePresenter) && item.new_record? %>
-    <div class="progress"></div>
-    <div class="cancel"></div>
-  <% end %>
 
-  <div class="modal fade properties" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title"><%= item.name %></h4>
-        </div>
-        <div class="modal-body">
-          Size: <%= number_to_human_size item.size %>
+    <div class="item-image">
+      <span class="icon" style="background-image: url(<%= item.image_full_path %>);"></span>
+    </div>
+    <div class="item-body">
+      <div class="name item-title">
+        <div class="item-name"><%= item.name %></div>
+        <%= form_for(item, remote: true) do |f| %>
+          <%= f.text_area :name, class: "item-name-text" %>
+        <% end %>
+      </div>
+      <% if item.persisted? %>
+        <div class="size"><span class="value"><%= number_to_human_size item.size %></span></div>
+      <% end %>
+    </div>
+    <% if item.is_a?(FilePresenter) && item.new_record? %>
+      <div class="progress"></div>
+      <div class="cancel"></div>
+    <% end %>
+
+    <div class="modal fade properties" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"><%= item.name %></h4>
+          </div>
+          <div class="modal-body">
+            Size: <%= number_to_human_size item.size %>
+          </div>
         </div>
       </div>
     </div>
+
+    <%= form_for(item, url: cut_item_path(item), html: {class: "cut_form"}, remote: true) do |f| %>
+      <%= f.hidden_field :parent_id, class: "item-parent-id" %>
+    <% end %>
+
+    <%= form_for(item, url: copy_item_path(item), html: {class: "copy_form"}, remote: true) do |f| %>
+      <%= f.hidden_field :parent_id, class: "item-parent-id" %>
+    <% end %>
   </div>
-
-  <%= form_for(item, url: cut_item_path(item), html: {class: "cut_form"}, remote: true) do |f| %>
-    <%= f.hidden_field :parent_id, class: "item-parent-id" %>
-  <% end %>
-
-  <%= form_for(item, url: copy_item_path(item), html: {class: "copy_form"}, remote: true) do |f| %>
-    <%= f.hidden_field :parent_id, class: "item-parent-id" %>
-  <% end %>
 </div>

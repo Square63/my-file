@@ -22,6 +22,11 @@
   height: 110px;
   position: relative;
   border: 1px solid transparent;
+  text-align: center;
+}
+
+.item-container {
+  display: inline-block;
 }
 
 .item-add {
