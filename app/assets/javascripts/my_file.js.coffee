@@ -278,6 +278,10 @@ MyFile.init_main_right_click = ->
     touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     MyFile.menu_cancelled obj, touch
 
+MyFile.trigger_rename_action = (obj) ->
+  obj.find(".item-name").hide()
+  obj.find(".item-name-text").show().focus().select()
+
 $(document).ready ->
   $(".item.real").each ->
     MyFile.apply_js_item $(this)
