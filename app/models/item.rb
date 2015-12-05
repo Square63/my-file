@@ -14,12 +14,25 @@ class Item < ActiveRecord::Base
   scope :upload, -> { where(type: "Upload") }
   scope :ordered, -> { order("position ASC") }
 
+  def pathname
+    Pathname.new name
+  end
+
   def name=(new_name)
     self[:name] = CGI.unescape new_name.to_s
   end
 
+  def name_without_extension
+    pathname.basename ".*"
+  end
+
+  def extension
+    ext = pathname.extname[1..-1]
+    ext if ext.present?
+  end
+
   def find_uniq_name(counter = 1, batch_size=30)
-    names = (counter..counter+batch_size).collect {|i| [name, i].join(' ')}
+    names = (counter..counter+batch_size).collect {|i| [[name_without_extension, i].join(' '), extension].compact.join(".")}
     names.unshift(name) if counter == 1
     previous_names = self.class.where(parent_id: parent_id, type: type).where(name: names).collect(&:name)
     (names - previous_names).first || find_uniq_name(counter + batch_size)
