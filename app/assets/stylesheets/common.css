@@ -27,6 +27,7 @@
 
 .item-container {
   display: inline-block;
+  width: 100%;
 }
 
 .item-add {
