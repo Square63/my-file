@@ -43,6 +43,18 @@ MyFile.cut = (obj) ->
 MyFile.copy = (obj) ->
   MyFile.store obj, "copy"
 
+MyFile.do_cut = (parent, id) ->
+  parent.fadeOut()
+  form = parent.find(".cut_form")
+  form.find(".item-parent-id").val id
+  form.submit()
+  $.removeCookie MyFile.store_cookie, path: "/"
+
+MyFile.do_copy = (parent, id) ->
+  form = parent.find(".copy_form")
+  form.find(".item-parent-id").val id
+  form.submit()
+
 MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
@@ -51,15 +63,9 @@ MyFile.paste = (id) ->
 
   switch store.action
     when "cut"
-      parent.fadeOut()
-      form = parent.find(".cut_form")
-      form.find(".item-parent-id").val id
-      form.submit()
-      $.removeCookie MyFile.store_cookie, path: "/"
+      MyFile.do_cut parent, id
     when "copy"
-      form = parent.find(".copy_form")
-      form.find(".item-parent-id").val id
-      form.submit()
+      MyFile.do_copy parent, id
 
     else console.log "Unknown action #{store.action}"
 
