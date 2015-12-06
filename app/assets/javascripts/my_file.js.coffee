@@ -7,28 +7,13 @@ MyFile.touchdown_timer = null
 
 $.cookie.json = true;
 
-MyFile.reload_sortable = ->
-  if $("#items").length == 0
-    return false
-
-  if MyFile.sortable
-    MyFile.sortable.destroy()
-    MyFile.sortable = null
-
-  MyFile.sortable = Sortable.create $("#items")[0],
-    group: "items",
-    animation: 500,
-    draggable: ".item",
-    handle: ".icon",
-    onUpdate: (e) ->
-      MyFile.reorder_items()
-
 MyFile.reorder_items = ->
-  ids = $("#items .item").map ->
-    $(this).data("id")
-  .get().join(",")
+  new_order = {}
+  $("#items .item").each ->
+    self = $(this)
+    new_order[self.data("id")] = self.position()
 
-  $("#reorder-form").find("input[name=ids]").val(ids)
+  $("#reorder-form").find("input[name=new_order]").val JSON.stringify(new_order)
   $("#reorder-form").submit();
 
 MyFile.rename_item = (obj) ->
@@ -142,7 +127,7 @@ MyFile.apply_right_click = (objs) ->
       action: ->
         obj.find(".properties").modal()
 
-    obj.find('.icon').contextmenu
+    obj.find('.handle').contextmenu
       onContextMenu: true
       alias: "menu-#{obj.attr("id")}"
       width: 150
@@ -183,8 +168,22 @@ MyFile.menu_cancelled = (obj, e) ->
     location.href = url if url
   MyFile.touchdown_timer = null
 
+MyFile.apply_drag_drop = (obj) ->
+  obj.draggable
+    handle: obj.find(".handle")
+    containment: "#items"
+    stop: (event, ui) ->
+      MyFile.reorder_items()
+
+  obj.find(".item-container").droppable
+    hoverClass: "drop-hover"
+    tolerance: "intersect"
+    drop: (event, ui) ->
+      console.log $(this).addClass("dropped")
+
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
+  MyFile.apply_drag_drop obj
 
   obj.find(".item-name").on "click", ->
     $(this).hide().parents(".item").find(".item-name-text").show().focus().select()
@@ -260,5 +259,4 @@ MyFile.init_main_right_click = ->
 
 $(document).ready ->
   MyFile.apply_js_item $(".item.real")
-  MyFile.reload_sortable()
   MyFile.init_main_right_click()

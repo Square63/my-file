@@ -67,4 +67,17 @@ class Item < ActiveRecord::Base
     item.file_id = id
     item
   end
+
+  def self.update_order(items, new_order)
+    new_order = new_order.sort do |(id1, position1), (id2, position2)|
+      ((position1["top"] / 50 <=> position2["top"] / 50)) * 2 + (position1["left"] <=> position2["left"])
+    end
+
+    ids = new_order.collect &:first
+
+    items.each do |item|
+      item.position = ids.index(item.to_param).to_i.next
+      item.update_column(:position, item.position) if item.position_changed?
+    end
+  end
 end

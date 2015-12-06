@@ -52,12 +52,9 @@ class ItemsController < ApplicationController
   end
 
   def reorder
-    ids = params[:ids].split(",").collect { |id| item_id(id) }
-
-    items.find(ids).each do |item|
-      item.position = ids.index(item.id).to_i.next
-      item.update_column(:position, item.position) if item.position_changed?
-    end
+    new_order = JSON.parse params[:new_order]
+    ids = new_order.keys.collect {|id| item_id(id)}
+    Item.update_order items.find(ids), new_order
 
     respond_to do |format|
       format.js
