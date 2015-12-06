@@ -75,9 +75,17 @@ class Item < ActiveRecord::Base
 
     ids = new_order.collect &:first
 
-    items.each do |item|
-      item.position = ids.index(item.to_param).to_i.next
-      item.update_column(:position, item.position) if item.position_changed?
+    deltas = items.inject({}) do |_, item|
+      new_position = ids.index(item.to_param).to_i.next
+      difference = new_position - item.position
+      _[difference] ||= []
+      _[difference] << item
+      _
+    end
+
+    deltas.each do |difference, items|
+      next if difference.zero?
+      where(id: items.collect(&:id)).update_all("position = position + #{difference}")
     end
   end
 end
