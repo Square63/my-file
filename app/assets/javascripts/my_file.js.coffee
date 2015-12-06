@@ -221,7 +221,7 @@ MyFile.apply_js_item = (obj) ->
       false
 
 MyFile.init_main_right_click = ->
-  obj = $("#items")
+  obj = $("#wrap-all")
 
   items = []
 

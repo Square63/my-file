@@ -3,10 +3,20 @@
   -webkit-user-select: none;
 }
 
+body {
+  background-color: #FCFCFC;
+}
+
+#wrap-all {
+  width: 100%;
+}
+
 #items {
   float: left;
   width: 100%;
+  min-height: 400px;
   display: block;
+  background-color: #FFF;
 }
 
 #data-container {
@@ -211,4 +221,13 @@
 
 .ui-draggable-dragging {
   z-index: 99999;
+}
+
+.footer {
+  width: 100%;
+}
+
+.footer .container {
+  margin-top: 10px;
+  text-align: center;
 }
