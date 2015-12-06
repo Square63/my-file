@@ -139,14 +139,14 @@ MyFile.apply_right_click = (objs) ->
         else
           menu.disable "paste", true
 
-    obj.find(".icon").on "mousedown", (e) ->
-      MyFile.show_menu obj.find(".icon"), e
+    obj.find(".handle").on "mousedown", (e) ->
+      MyFile.show_menu obj.find(".handle"), e
     .on "mouseup", (e) ->
       MyFile.menu_cancelled obj, e
 
-    obj.find(".icon").on "touchstart", (e) ->
+    obj.find(".handle").on "touchstart", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-      MyFile.show_menu obj.find(".icon"), touch
+      MyFile.show_menu obj.find(".handle"), touch
     .on "touchend", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
       MyFile.menu_cancelled obj, touch
