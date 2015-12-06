@@ -3,6 +3,8 @@ class Item < ActiveRecord::Base
 
   validates_presence_of :user_id, :type
 
+  validate :parent_is_valid
+
   belongs_to :user
   before_save :set_name, :set_position
   belongs_to :parent, class_name: "Item"
@@ -44,7 +46,7 @@ class Item < ActiveRecord::Base
 
   def set_name
     self.name = self.type.titleize if self.name.blank?
-    self.name = find_uniq_name
+    self.name = find_uniq_name if name_changed?
   end
 
   def set_position
@@ -66,6 +68,13 @@ class Item < ActiveRecord::Base
     item.id = item.position = nil
     item.file_id = id
     item
+  end
+
+  def parent_is_valid
+    return unless parent
+
+    self.errors[:parent] << "should be a folder" unless parent.is_a?(Folder)
+    self.errors[:parent] << "cannot be self" if parent == self
   end
 
   def self.update_order(items, new_order)

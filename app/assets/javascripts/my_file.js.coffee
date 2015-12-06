@@ -187,13 +187,20 @@ MyFile.apply_drag_drop = (obj) ->
     handle: obj.find(".handle")
     containment: "#items"
     stop: (event, ui) ->
-      MyFile.reorder_items()
+      MyFile.reorder_items() unless obj.hasClass("hovering")
 
-  obj.find(".item-container").droppable
-    hoverClass: "drop-hover"
-    tolerance: "intersect"
-    drop: (event, ui) ->
-      console.log $(this).addClass("dropped")
+  if obj.data("type") == "folder"
+    obj.find(".item-container").droppable
+      tolerance: "intersect"
+      over: (event, ui) ->
+        $(this).addClass "drop-hover"
+        $(event.toElement).parents(".item").addClass "hovering"
+      out: (event, ui) ->
+        $(this).removeClass "drop-hover"
+        $(event.toElement).parents(".item").removeClass "hovering"
+      drop: (event, ui) ->
+        $(this).removeClass "drop-hover"
+        MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
@@ -272,5 +279,6 @@ MyFile.init_main_right_click = ->
     MyFile.menu_cancelled obj, touch
 
 $(document).ready ->
-  MyFile.apply_js_item $(".item.real")
+  $(".item.real").each ->
+    MyFile.apply_js_item $(this)
   MyFile.init_main_right_click()
