@@ -2,7 +2,7 @@ window.MyFile = {}
 
 MyFile.store_cookie = "store"
 MyFile.current_item_id = null
-MyFile.touchdown_timeout = 500
+MyFile.touchdown_timeout = 1000
 MyFile.touchdown_timer = null
 
 $.cookie.json = true;
@@ -142,14 +142,18 @@ MyFile.apply_right_click = (objs) ->
     obj.find(".handle").on "mousedown", (e) ->
       MyFile.show_menu obj.find(".handle"), e
     .on "mouseup", (e) ->
-      MyFile.menu_cancelled obj, e
+      MyFile.menu_interrupt obj, e
+    .on "mousemove", (e) ->
+      MyFile.menu_cancelled obj
 
     obj.find(".handle").on "touchstart", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
       MyFile.show_menu obj.find(".handle"), touch
     .on "touchend", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-      MyFile.menu_cancelled obj, touch
+      MyFile.menu_interrupt obj, touch
+    .on "touchmove", (e) ->
+      MyFile.menu_cancelled obj
 
 MyFile.dump = (s) ->
   JSON.stringify s, null, "\t"
@@ -161,11 +165,15 @@ MyFile.show_menu = (obj, e) ->
     obj.trigger "contextmenu", e
   , MyFile.touchdown_timeout
 
-MyFile.menu_cancelled = (obj, e) ->
+MyFile.menu_interrupt = (obj, e) ->
   if MyFile.touchdown_timer
-    clearTimeout MyFile.touchdown_timer
     url = obj.data("url")
     location.href = url if url
+
+  MyFile.menu_cancelled obj
+
+MyFile.menu_cancelled = (obj) ->
+  clearTimeout MyFile.touchdown_timer
   MyFile.touchdown_timer = null
 
 MyFile.apply_drag_drop = (obj) ->
