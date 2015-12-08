@@ -192,13 +192,18 @@ MyFile.apply_js_item = (obj) ->
   obj.find(".item-name-text").on "blur", ->
     MyFile.rename_item this
 
-  obj.find(".item-name-text").keypress (e) ->
+  obj.find(".item-name-text").keyup (e) ->
     e = e || window.event;
     key_code = e.keyCode || e.which;
 
     if (key_code == 13)
       MyFile.rename_item this
       false
+
+    if key_code == 27
+      parent = $(this).parents(".item")
+      parent.find(".item-name").show()
+      $(this).val(parent.find(".item-name").text()).hide()
 
 MyFile.init_main_right_click = ->
   obj = $("#items")
