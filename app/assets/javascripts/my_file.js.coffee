@@ -202,17 +202,21 @@ MyFile.apply_drag_drop = (obj) ->
         $(this).removeClass "drop-hover"
         MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
 
+MyFile.select_text = (text_area, start, end) ->
+  text_area.focus()
+  text_area.setSelectionRange start, end
+
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
   MyFile.apply_drag_drop obj
 
   obj.find(".item-name").on "click", ->
-    $(this).hide().parents(".item").find(".item-name-text").show().focus().select()
+    MyFile.trigger_rename_action $(this).parents(".item")
 
   obj.find(".item-name-text").on "blur", ->
     MyFile.rename_item this
 
-  obj.find(".item-name-text").keyup (e) ->
+  obj.find(".item-name-text").keydown (e) ->
     e = e || window.event;
     key_code = e.keyCode || e.which;
 
@@ -284,8 +288,15 @@ MyFile.init_main_right_click = ->
     MyFile.menu_cancelled obj, touch
 
 MyFile.trigger_rename_action = (obj) ->
+  text_area = obj.find(".item-name-text")
+  text = text_area.val()
+  if text.lastIndexOf(".") > -1 && obj.data("type") != "folder"
+    end = text.lastIndexOf(".")
+  else
+    end = text.length
   obj.find(".item-name").hide()
-  obj.find(".item-name-text").show().focus().select()
+  text_area.show()
+  MyFile.select_text(text_area[0], 0, end);
 
 $(document).ready ->
   $(".item.real").each ->
