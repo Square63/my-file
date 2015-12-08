@@ -7,6 +7,7 @@
     </div>
 
     <div class="item-image">
+      <div class="handle"></div>
       <span class="icon" style="background-image: url(<%= item.image_full_path %>);"></span>
     </div>
     <div class="item-body">
@@ -40,11 +41,11 @@
     </div>
 
     <%= form_for(item, url: cut_item_path(item), html: {class: "cut_form"}, remote: true) do |f| %>
-      <%= f.hidden_field :parent_id, class: "item-parent-id" %>
+      <%= hidden_field_tag :parent_id, item.parent.to_param, class: "item-parent-id" %>
     <% end %>
 
     <%= form_for(item, url: copy_item_path(item), html: {class: "copy_form"}, remote: true) do |f| %>
-      <%= f.hidden_field :parent_id, class: "item-parent-id" %>
+      <%= hidden_field_tag :parent_id, item.parent.to_param, class: "item-parent-id" %>
     <% end %>
   </div>
 </div>

@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_filter :get_item, only: [:show, :destroy, :update, :cut, :copy]
+  before_filter :get_parent, only: [:cut, :copy]
 
   def index
     @folder = current_user.main_folder
@@ -27,7 +28,6 @@ class ItemsController < ApplicationController
   end
 
   def cut
-    @parent = Item.find params[:item][:parent_id]
     @item.parent = @parent
     @item.save
 
@@ -37,7 +37,6 @@ class ItemsController < ApplicationController
   end
 
   def copy
-    @parent = Item.find params[:item][:parent_id]
     @item = @item.copy
     @item.user = current_user
     @item.parent = @parent
@@ -52,12 +51,9 @@ class ItemsController < ApplicationController
   end
 
   def reorder
-    ids = params[:ids].split(",").collect { |id| item_id(id) }
-
-    items.find(ids).each do |item|
-      item.position = ids.index(item.id).to_i.next
-      item.update_column(:position, item.position) if item.position_changed?
-    end
+    new_order = JSON.parse params[:new_order]
+    ids = new_order.keys.collect {|id| item_id(id)}
+    Item.update_order items.find(ids), new_order
 
     respond_to do |format|
       format.js
@@ -72,6 +68,10 @@ class ItemsController < ApplicationController
 
   def get_item
     @item ||= ItemPresenterFactory.for(items.find(item_id(params[:id])))
+  end
+
+  def get_parent
+    @parent ||= Item.find params[:parent_id]
   end
 
   def item_id(id)

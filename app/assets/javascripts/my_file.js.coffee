@@ -2,33 +2,18 @@ window.MyFile = {}
 
 MyFile.store_cookie = "store"
 MyFile.current_item_id = null
-MyFile.touchdown_timeout = 500
+MyFile.touchdown_timeout = 1000
 MyFile.touchdown_timer = null
 
 $.cookie.json = true;
 
-MyFile.reload_sortable = ->
-  if $("#items").length == 0
-    return false
-
-  if MyFile.sortable
-    MyFile.sortable.destroy()
-    MyFile.sortable = null
-
-  MyFile.sortable = Sortable.create $("#items")[0],
-    group: "items",
-    animation: 500,
-    draggable: ".item",
-    handle: ".icon",
-    onUpdate: (e) ->
-      MyFile.reorder_items()
-
 MyFile.reorder_items = ->
-  ids = $("#items .item").map ->
-    $(this).data("id")
-  .get().join(",")
+  new_order = {}
+  $("#items .item").each ->
+    self = $(this)
+    new_order[self.data("id")] = self.position()
 
-  $("#reorder-form").find("input[name=ids]").val(ids)
+  $("#reorder-form").find("input[name=new_order]").val JSON.stringify(new_order)
   $("#reorder-form").submit();
 
 MyFile.rename_item = (obj) ->
@@ -58,6 +43,18 @@ MyFile.cut = (obj) ->
 MyFile.copy = (obj) ->
   MyFile.store obj, "copy"
 
+MyFile.do_cut = (parent, id) ->
+  parent.fadeOut()
+  form = parent.find(".cut_form")
+  form.find(".item-parent-id").val id
+  form.submit()
+  $.removeCookie MyFile.store_cookie, path: "/"
+
+MyFile.do_copy = (parent, id) ->
+  form = parent.find(".copy_form")
+  form.find(".item-parent-id").val id
+  form.submit()
+
 MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
@@ -66,15 +63,9 @@ MyFile.paste = (id) ->
 
   switch store.action
     when "cut"
-      parent.fadeOut()
-      form = parent.find(".cut_form")
-      form.find(".item-parent-id").val id
-      form.submit()
-      $.removeCookie MyFile.store_cookie, path: "/"
+      MyFile.do_cut parent, id
     when "copy"
-      form = parent.find(".copy_form")
-      form.find(".item-parent-id").val id
-      form.submit()
+      MyFile.do_copy parent, id
 
     else console.log "Unknown action #{store.action}"
 
@@ -142,7 +133,7 @@ MyFile.apply_right_click = (objs) ->
       action: ->
         obj.find(".properties").modal()
 
-    obj.find('.icon').contextmenu
+    obj.find('.handle').contextmenu
       onContextMenu: true
       alias: "menu-#{obj.attr("id")}"
       width: 150
@@ -154,17 +145,21 @@ MyFile.apply_right_click = (objs) ->
         else
           menu.disable "paste", true
 
-    obj.find(".icon").on "mousedown", (e) ->
-      MyFile.show_menu obj.find(".icon"), e
+    obj.find(".handle").on "mousedown", (e) ->
+      MyFile.show_menu obj.find(".handle"), e
     .on "mouseup", (e) ->
-      MyFile.menu_cancelled obj, e
+      MyFile.menu_interrupt obj, e
+    .on "mousemove", (e) ->
+      MyFile.menu_cancelled obj
 
-    obj.find(".icon").on "touchstart", (e) ->
+    obj.find(".handle").on "touchstart", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-      MyFile.show_menu obj.find(".icon"), touch
+      MyFile.show_menu obj.find(".handle"), touch
     .on "touchend", (e) ->
       touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-      MyFile.menu_cancelled obj, touch
+      MyFile.menu_interrupt obj, touch
+    .on "touchmove", (e) ->
+      MyFile.menu_cancelled obj
 
 MyFile.dump = (s) ->
   JSON.stringify s, null, "\t"
@@ -176,15 +171,40 @@ MyFile.show_menu = (obj, e) ->
     obj.trigger "contextmenu", e
   , MyFile.touchdown_timeout
 
-MyFile.menu_cancelled = (obj, e) ->
+MyFile.menu_interrupt = (obj, e) ->
   if MyFile.touchdown_timer
-    clearTimeout MyFile.touchdown_timer
     url = obj.data("url")
     location.href = url if url
+
+  MyFile.menu_cancelled obj
+
+MyFile.menu_cancelled = (obj) ->
+  clearTimeout MyFile.touchdown_timer
   MyFile.touchdown_timer = null
+
+MyFile.apply_drag_drop = (obj) ->
+  obj.draggable
+    handle: obj.find(".handle")
+    containment: "#items"
+    stop: (event, ui) ->
+      MyFile.reorder_items() unless obj.hasClass("hovering")
+
+  if obj.data("type") == "folder"
+    obj.find(".item-container").droppable
+      tolerance: "intersect"
+      over: (event, ui) ->
+        $(this).addClass "drop-hover"
+        $(event.toElement).parents(".item").addClass "hovering"
+      out: (event, ui) ->
+        $(this).removeClass "drop-hover"
+        $(event.toElement).parents(".item").removeClass "hovering"
+      drop: (event, ui) ->
+        $(this).removeClass "drop-hover"
+        MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
+  MyFile.apply_drag_drop obj
 
   obj.find(".item-name").on "click", ->
     $(this).hide().parents(".item").find(".item-name-text").show().focus().select()
@@ -206,7 +226,7 @@ MyFile.apply_js_item = (obj) ->
       $(this).val(parent.find(".item-name").text()).hide()
 
 MyFile.init_main_right_click = ->
-  obj = $("#items")
+  obj = $("#wrap-all")
 
   items = []
 
@@ -268,6 +288,6 @@ MyFile.trigger_rename_action = (obj) ->
   obj.find(".item-name-text").show().focus().select()
 
 $(document).ready ->
-  MyFile.apply_js_item $(".item.real")
-  MyFile.reload_sortable()
+  $(".item.real").each ->
+    MyFile.apply_js_item $(this)
   MyFile.init_main_right_click()

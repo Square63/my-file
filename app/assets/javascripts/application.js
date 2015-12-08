@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
+//= require jquery.ui.touch-punch
 //= require common
 //= require jquery.base64
 //= require jquery.cookie.js
@@ -20,5 +22,4 @@
 //= require jquery.iframe-transport
 //= require jquery.contextmenu
 //= require customUploader
-//= require sortable
 //= require my_file

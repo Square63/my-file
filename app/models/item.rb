@@ -3,6 +3,8 @@ class Item < ActiveRecord::Base
 
   validates_presence_of :user_id, :type
 
+  validate :parent_is_valid
+
   belongs_to :user
   before_save :set_name, :set_position
   belongs_to :parent, class_name: "Item"
@@ -14,12 +16,25 @@ class Item < ActiveRecord::Base
   scope :upload, -> { where(type: "Upload") }
   scope :ordered, -> { order("position ASC") }
 
+  def pathname
+    Pathname.new name
+  end
+
   def name=(new_name)
     self[:name] = CGI.unescape new_name.to_s
   end
 
+  def name_without_extension
+    pathname.basename ".*"
+  end
+
+  def extension
+    ext = pathname.extname[1..-1]
+    ext if ext.present?
+  end
+
   def find_uniq_name(counter = 1, batch_size=30)
-    names = (counter..counter+batch_size).collect {|i| [name, i].join(' ')}
+    names = (counter..counter+batch_size).collect {|i| [[name_without_extension, i].join(' '), extension].compact.join(".")}
     names.unshift(name) if counter == 1
     previous_names = self.class.where(parent_id: parent_id, type: type).where(name: names).collect(&:name)
     (names - previous_names).first || find_uniq_name(counter + batch_size)
@@ -31,7 +46,7 @@ class Item < ActiveRecord::Base
 
   def set_name
     self.name = self.type.titleize if self.name.blank?
-    self.name = find_uniq_name
+    self.name = find_uniq_name if name_changed?
   end
 
   def set_position
@@ -53,5 +68,33 @@ class Item < ActiveRecord::Base
     item.id = item.position = nil
     item.file_id = id
     item
+  end
+
+  def parent_is_valid
+    return unless parent
+
+    self.errors[:parent] << "should be a folder" unless parent.is_a?(Folder)
+    self.errors[:parent] << "cannot be self" if parent == self
+  end
+
+  def self.update_order(items, new_order)
+    new_order = new_order.sort do |(id1, position1), (id2, position2)|
+      ((position1["top"] / 50 <=> position2["top"] / 50)) * 2 + (position1["left"] <=> position2["left"])
+    end
+
+    ids = new_order.collect &:first
+
+    deltas = items.inject({}) do |_, item|
+      new_position = ids.index(item.to_param).to_i.next
+      difference = new_position - item.position
+      _[difference] ||= []
+      _[difference] << item
+      _
+    end
+
+    deltas.each do |difference, items|
+      next if difference.zero?
+      where(id: items.collect(&:id)).update_all("position = position + #{difference}")
+    end
   end
 end
