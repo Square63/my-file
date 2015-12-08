@@ -44,6 +44,7 @@ class ItemsController < ApplicationController
     @item.save
 
     @item = ItemPresenterFactory.for @item
+    @parent = ItemPresenterFactory.for @parent
 
     respond_to do |format|
       format.js

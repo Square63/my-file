@@ -1,8 +1,13 @@
 var item = $("<%= raw escape_javascript(render @item) %>");
+var parent = $("<%= raw escape_javascript(render 'item', item: @parent) %>");
 
 if(item.data("parentId") == MyFile.current_item_id) {
   item.hide();
   $("#items").append(item);
   item.fadeIn();
   MyFile.apply_js_item(item);
+}
+else {
+  $("#item-"+item.data("parentId")).replaceWith(parent);
+  MyFile.apply_js_item(parent);
 }
