@@ -8,6 +8,6 @@ if(item.data("parentId") == MyFile.current_item_id) {
   MyFile.apply_js_item(item);
 }
 else {
-  $("#item-"+item.data("parentId")).replaceWith(parent);
+  $("#<%= @parent.view_id %>").replaceWith(parent);
   MyFile.apply_js_item(parent);
 }

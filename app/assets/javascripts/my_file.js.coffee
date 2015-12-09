@@ -202,10 +202,6 @@ MyFile.apply_drag_drop = (obj) ->
         $(this).removeClass "drop-hover"
         MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
 
-MyFile.select_text = (text_area, start, end) ->
-  text_area.focus()
-  text_area.setSelectionRange start, end
-
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
   MyFile.apply_drag_drop obj
@@ -225,9 +221,11 @@ MyFile.apply_js_item = (obj) ->
       false
 
     if key_code == 27
-      parent = $(this).parents(".item")
-      parent.find(".item-name").show()
-      $(this).val(parent.find(".item-name").text()).hide()
+      item = $(this).parents(".item")
+      item_name = item.find(".item-name")
+      item_name.show()
+      $(this).val(item_name.text()).hide()
+      false
 
 MyFile.init_main_right_click = ->
   obj = $("#wrap-all")
@@ -291,12 +289,13 @@ MyFile.trigger_rename_action = (obj) ->
   text_area = obj.find(".item-name-text")
   text = text_area.val()
   if text.lastIndexOf(".") > -1 && obj.data("type") != "folder"
-    end = text.lastIndexOf(".")
+    end_index = text.lastIndexOf(".")
   else
-    end = text.length
+    end_index = text.length
   obj.find(".item-name").hide()
   text_area.show()
-  MyFile.select_text(text_area[0], 0, end);
+  text_area[0].focus()
+  text_area[0].setSelectionRange 0, end_index
 
 $(document).ready ->
   $(".item.real").each ->
