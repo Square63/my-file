@@ -63,10 +63,13 @@ class Item < ActiveRecord::Base
     parent.decrease_folder_size_by(s) if parent
   end
 
-  def copy
+  def copy(parent, current_user)
     item = self.class.new attributes
     item.id = item.position = nil
-    item.file_id = id
+    item.file_id = id if item.type == "Upload"
+    item.user = current_user
+    item.parent = parent
+    item.save
     item
   end
 
