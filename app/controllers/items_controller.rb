@@ -43,11 +43,7 @@ class ItemsController < ApplicationController
   end
 
   def copy
-    @item = @item.copy
-    @item.user = current_user
-    @item.parent = @parent
-
-    @item.save
+    @item = @item.copy(@parent, current_user)
 
     @item = ItemPresenterFactory.for @item
     @parent = ItemPresenterFactory.for @parent
