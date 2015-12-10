@@ -28,8 +28,14 @@ class ItemsController < ApplicationController
   end
 
   def cut
+    @origin_parent = @item.parent
     @item.parent = @parent
     @item.save
+
+    @origin_parent.decrease_folder_size_by @item.size
+    @parent.increase_folder_size_by @item.size
+    @parent = ItemPresenterFactory.for @parent
+    @origin_parent = ItemPresenterFactory.for @origin_parent
 
     respond_to do |format|
       format.js

@@ -1,3 +1,22 @@
 $("#<%= @item.view_id %>").fadeOut(function() {
   $(this).remove();
 });
+
+if($("#<%= @parent.view_id %>").length) {
+  var parent = $("<%= raw escape_javascript(render 'item', item: @parent) %>");
+  $("#<%= @parent.view_id %>").replaceWith(parent);
+  MyFile.apply_js_item(parent);
+}
+else {
+  var item = $("<%= raw escape_javascript(render @item) %>");
+  item.hide();
+  $("#items").append(item);
+  item.fadeIn();
+  MyFile.apply_js_item(item);
+}
+
+if($("#<%= @origin_parent.view_id %>").length) {
+  var origin_parent = $("<%= raw escape_javascript(render 'item', item: @origin_parent) %>");
+  $("#<%= @origin_parent.view_id %>").replaceWith(origin_parent);
+  MyFile.apply_js_item(origin_parent);
+}

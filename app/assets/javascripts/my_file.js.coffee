@@ -43,29 +43,36 @@ MyFile.cut = (obj) ->
 MyFile.copy = (obj) ->
   MyFile.store obj, "copy"
 
-MyFile.do_cut = (parent, id) ->
-  parent.fadeOut()
-  form = parent.find(".cut_form")
-  form.find(".item-parent-id").val id
-  form.submit()
+MyFile.do_cut = (item_id, parent_id) ->
+  $.ajax
+    type: 'POST'
+    url: "/items/#{item_id}/cut"
+    data:
+      'id': item_id
+      'parent_id': parent_id
+      '_method':'patch'
   $.removeCookie MyFile.store_cookie, path: "/"
 
-MyFile.do_copy = (parent, id) ->
-  form = parent.find(".copy_form")
-  form.find(".item-parent-id").val id
-  form.submit()
+MyFile.do_copy = (item_id, parent_id) ->
+  $.ajax
+    type: 'POST'
+    url: "/items/#{item_id}/copy"
+    data:
+      'id': item_id
+      'parent_id': parent_id
+      '_method':'patch'
 
 MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
-
-  parent = $("##{store.id}")
+  item_id = store.id.split("-")[1]
 
   switch store.action
     when "cut"
-      MyFile.do_cut parent, id
+      return if Number(id) == $("##{store.id}").data("parent-id")
+      MyFile.do_cut item_id, id
     when "copy"
-      MyFile.do_copy parent, id
+      MyFile.do_copy item_id, id
 
     else console.log "Unknown action #{store.action}"
 
@@ -140,7 +147,7 @@ MyFile.apply_right_click = (objs) ->
       items: items
       onShow: (menu) ->
         store = $.cookie(MyFile.store_cookie)
-        if store && $("##{store.id}").length && store.id != obj.attr("id")
+        if store && store.id != obj.attr("id")
           menu.disable "paste", false
         else
           menu.disable "paste", true
@@ -200,7 +207,7 @@ MyFile.apply_drag_drop = (obj) ->
         $(event.toElement).parents(".item").removeClass "hovering"
       drop: (event, ui) ->
         $(this).removeClass "drop-hover"
-        MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
+        MyFile.do_cut $(event.toElement).parents(".item").attr("id").split("-")[1], $(this).parents(".item").data("id")
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
@@ -264,7 +271,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut" && store.id == MyFile.current_item_id)
+      if store && (store.action == "copy" || store.action == "cut" && store.id.split("-")[1] != MyFile.current_item_id)
         menu.disable "paste", false
       else
         menu.disable "paste", true
