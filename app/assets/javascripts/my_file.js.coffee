@@ -35,7 +35,7 @@ MyFile.menu_icon = (image) ->
   "/assets/images/menu/#{image}.png"
 
 MyFile.store = (obj, action) ->
-  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action}, {path: "/"}
+  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, path: window.location.pathname}, {path: "/"}
 
 MyFile.cut = (obj) ->
   MyFile.store obj, "cut"
@@ -59,15 +59,15 @@ MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
 
-  parent = $("##{store.id}")
+  $('#data-container').append $('<div>').load "#{store.path} ##{store.id}", ->
+    parent = $("##{store.id}")
+    switch store.action
+      when "cut"
+        MyFile.do_cut parent, id
+      when "copy"
+        MyFile.do_copy parent, id
 
-  switch store.action
-    when "cut"
-      MyFile.do_cut parent, id
-    when "copy"
-      MyFile.do_copy parent, id
-
-    else console.log "Unknown action #{store.action}"
+      else console.log "Unknown action #{store.action}"
 
 MyFile.apply_right_click = (objs) ->
   objs.each ->
@@ -140,7 +140,7 @@ MyFile.apply_right_click = (objs) ->
       items: items
       onShow: (menu) ->
         store = $.cookie(MyFile.store_cookie)
-        if store && $("##{store.id}").length && store.id != obj.attr("id")
+        if store && store.id != obj.attr("id")
           menu.disable "paste", false
         else
           menu.disable "paste", true
@@ -207,17 +207,24 @@ MyFile.apply_js_item = (obj) ->
   MyFile.apply_drag_drop obj
 
   obj.find(".item-name").on "click", ->
-    $(this).hide().parents(".item").find(".item-name-text").show().focus().select()
+    MyFile.trigger_rename_action $(this).parents(".item")
 
   obj.find(".item-name-text").on "blur", ->
     MyFile.rename_item this
 
-  obj.find(".item-name-text").keypress (e) ->
+  obj.find(".item-name-text").keydown (e) ->
     e = e || window.event;
     key_code = e.keyCode || e.which;
 
     if (key_code == 13)
       MyFile.rename_item this
+      false
+
+    if key_code == 27
+      item = $(this).parents(".item")
+      item_name = item.find(".item-name")
+      item_name.show()
+      $(this).val(item_name.text()).hide()
       false
 
 MyFile.init_main_right_click = ->
@@ -257,7 +264,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut" && store.id == MyFile.current_item_id)
+      if store && (store.action == "copy" || store.action == "cut" && store.id != MyFile.current_item_id)
         menu.disable "paste", false
       else
         menu.disable "paste", true
@@ -277,6 +284,18 @@ MyFile.init_main_right_click = ->
     return if $(e.target).parents(".item-container").length
     touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     MyFile.menu_cancelled obj, touch
+
+MyFile.trigger_rename_action = (obj) ->
+  text_area = obj.find(".item-name-text")
+  text = text_area.val()
+  if text.lastIndexOf(".") > -1 && obj.data("type") != "folder"
+    end_index = text.lastIndexOf(".")
+  else
+    end_index = text.length
+  obj.find(".item-name").hide()
+  text_area.show()
+  text_area.focus()
+  text_area[0].setSelectionRange 0, end_index
 
 $(document).ready ->
   $(".item.real").each ->

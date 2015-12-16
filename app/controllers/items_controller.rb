@@ -28,8 +28,9 @@ class ItemsController < ApplicationController
   end
 
   def cut
-    @item.parent = @parent
-    @item.save
+    @parent, @old_parent = @item.move_to @parent
+    @parent = ItemPresenterFactory.for @parent
+    @old_parent = ItemPresenterFactory.for @old_parent
 
     respond_to do |format|
       format.js
@@ -37,13 +38,10 @@ class ItemsController < ApplicationController
   end
 
   def copy
-    @item = @item.copy
-    @item.user = current_user
-    @item.parent = @parent
-
-    @item.save
+    @item = @item.copy_to(@parent, current_user)
 
     @item = ItemPresenterFactory.for @item
+    @parent = ItemPresenterFactory.for @parent
 
     respond_to do |format|
       format.js

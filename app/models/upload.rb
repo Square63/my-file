@@ -66,4 +66,5 @@ class Upload < Item
   def decrease_folder_size
     parent.decrease_folder_size_by size
   end
+
 end
