@@ -1,5 +1,5 @@
 var item = $("<%= raw escape_javascript(render @item) %>");
-var parent = $("<%= raw escape_javascript(render 'item', item: @parent) %>");
+var parent = $("<%= raw escape_javascript(render @parent) %>");
 
 if(item.data("parentId") == MyFile.current_item_id) {
   item.hide();

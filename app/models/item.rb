@@ -63,14 +63,24 @@ class Item < ActiveRecord::Base
     parent.decrease_folder_size_by(s) if parent
   end
 
-  def copy(parent, current_user)
+  def copy
     item = self.class.new attributes
     item.id = item.position = nil
-    item.file_id = id if item.type == "Upload"
-    item.user = current_user
-    item.parent = parent
-    item.save
+    item.file_id = id
     item
+  end
+
+  def copy_to(parent, current_user)
+    new_item = self.copy
+    new_item.user = current_user
+    new_item.parent = parent
+    new_item.save
+
+    self.items.each do |item|
+      item.copy_to(new_item, current_user)
+    end
+
+    new_item
   end
 
   def parent_is_valid
@@ -78,6 +88,15 @@ class Item < ActiveRecord::Base
 
     self.errors[:parent] << "should be a folder" unless parent.is_a?(Folder)
     self.errors[:parent] << "cannot be self" if parent == self
+  end
+
+  def move_to(parent)
+    old_parent = self.parent
+    self.parent = parent
+    self.save
+    old_parent.decrease_folder_size_by self.size
+    parent.increase_folder_size_by self.size
+    [parent, old_parent]
   end
 
   def self.update_order(items, new_order)

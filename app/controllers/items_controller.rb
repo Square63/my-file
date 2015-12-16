@@ -28,14 +28,9 @@ class ItemsController < ApplicationController
   end
 
   def cut
-    @origin_parent = @item.parent
-    @item.parent = @parent
-    @item.save
-
-    @origin_parent.decrease_folder_size_by @item.size
-    @parent.increase_folder_size_by @item.size
+    @parent, @old_parent = @item.move_to @parent
     @parent = ItemPresenterFactory.for @parent
-    @origin_parent = ItemPresenterFactory.for @origin_parent
+    @old_parent = ItemPresenterFactory.for @old_parent
 
     respond_to do |format|
       format.js
@@ -43,7 +38,7 @@ class ItemsController < ApplicationController
   end
 
   def copy
-    @item = @item.copy(@parent, current_user)
+    @item = @item.copy_to(@parent, current_user)
 
     @item = ItemPresenterFactory.for @item
     @parent = ItemPresenterFactory.for @parent
