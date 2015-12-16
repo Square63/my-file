@@ -67,11 +67,4 @@ class Upload < Item
     parent.decrease_folder_size_by size
   end
 
-  def copy(parent, current_user)
-    upload = super(parent, current_user)
-    upload.file_id = id
-    upload.save
-    upload
-  end
-
 end

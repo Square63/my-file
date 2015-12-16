@@ -35,7 +35,7 @@ MyFile.menu_icon = (image) ->
   "/assets/images/menu/#{image}.png"
 
 MyFile.store = (obj, action) ->
-  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action}, {path: "/"}
+  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, path: window.location.pathname}, {path: "/"}
 
 MyFile.cut = (obj) ->
   MyFile.store obj, "cut"
@@ -43,38 +43,31 @@ MyFile.cut = (obj) ->
 MyFile.copy = (obj) ->
   MyFile.store obj, "copy"
 
-MyFile.do_cut = (item_id, parent_id) ->
-  $.ajax
-    type: 'POST'
-    url: "/items/#{item_id}/cut"
-    data:
-      'id': item_id
-      'parent_id': parent_id
-      '_method':'patch'
+MyFile.do_cut = (parent, id) ->
+  parent.fadeOut()
+  form = parent.find(".cut_form")
+  form.find(".item-parent-id").val id
+  form.submit()
   $.removeCookie MyFile.store_cookie, path: "/"
 
-MyFile.do_copy = (item_id, parent_id) ->
-  $.ajax
-    type: 'POST'
-    url: "/items/#{item_id}/copy"
-    data:
-      'id': item_id
-      'parent_id': parent_id
-      '_method':'patch'
+MyFile.do_copy = (parent, id) ->
+  form = parent.find(".copy_form")
+  form.find(".item-parent-id").val id
+  form.submit()
 
 MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
-  item_id = store.id.split("-")[1]
 
-  switch store.action
-    when "cut"
-      return if Number(id) == $("##{store.id}").data("parent-id")
-      MyFile.do_cut item_id, id
-    when "copy"
-      MyFile.do_copy item_id, id
+  $('#data-container').append $('<div>').load "#{store.path} ##{store.id}", ->
+    parent = $("##{store.id}")
+    switch store.action
+      when "cut"
+        MyFile.do_cut parent, id
+      when "copy"
+        MyFile.do_copy parent, id
 
-    else console.log "Unknown action #{store.action}"
+      else console.log "Unknown action #{store.action}"
 
 MyFile.apply_right_click = (objs) ->
   objs.each ->
@@ -207,7 +200,7 @@ MyFile.apply_drag_drop = (obj) ->
         $(event.toElement).parents(".item").removeClass "hovering"
       drop: (event, ui) ->
         $(this).removeClass "drop-hover"
-        MyFile.do_cut $(event.toElement).parents(".item").attr("id").split("-")[1], $(this).parents(".item").data("id")
+        MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
@@ -271,7 +264,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && (store.action == "copy" || store.action == "cut" && store.id.split("-")[1] != MyFile.current_item_id)
+      if store && (store.action == "copy" || store.action == "cut" && store.id != MyFile.current_item_id)
         menu.disable "paste", false
       else
         menu.disable "paste", true
@@ -301,7 +294,7 @@ MyFile.trigger_rename_action = (obj) ->
     end_index = text.length
   obj.find(".item-name").hide()
   text_area.show()
-  text_area[0].focus()
+  text_area.focus()
   text_area[0].setSelectionRange 0, end_index
 
 $(document).ready ->

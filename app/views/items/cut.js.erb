@@ -3,7 +3,7 @@ $("#<%= @item.view_id %>").fadeOut(function() {
 });
 
 if($("#<%= @parent.view_id %>").length) {
-  var parent = $("<%= raw escape_javascript(render 'item', item: @parent) %>");
+  var parent = $("<%= raw escape_javascript(render @parent) %>");
   $("#<%= @parent.view_id %>").replaceWith(parent);
   MyFile.apply_js_item(parent);
 }
@@ -15,8 +15,8 @@ else {
   MyFile.apply_js_item(item);
 }
 
-if($("#<%= @origin_parent.view_id %>").length) {
-  var origin_parent = $("<%= raw escape_javascript(render 'item', item: @origin_parent) %>");
-  $("#<%= @origin_parent.view_id %>").replaceWith(origin_parent);
-  MyFile.apply_js_item(origin_parent);
+if($("#<%= @old_parent.view_id %>").length) {
+  var old_parent = $("<%= raw escape_javascript(render 'item', item: @old_parent) %>");
+  $("#<%= @old_parent.view_id %>").replaceWith(old_parent);
+  MyFile.apply_js_item(old_parent);
 }
