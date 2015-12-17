@@ -6,8 +6,7 @@ if($("#<%= @parent.view_id %>").length) {
   var parent = $("<%= raw escape_javascript(render @parent) %>");
   $("#<%= @parent.view_id %>").replaceWith(parent);
   MyFile.apply_js_item(parent);
-}
-else {
+} else {
   var item = $("<%= raw escape_javascript(render @item) %>");
   item.hide();
   $("#items").append(item);
@@ -16,7 +15,7 @@ else {
 }
 
 if($("#<%= @old_parent.view_id %>").length) {
-  var old_parent = $("<%= raw escape_javascript(render 'item', item: @old_parent) %>");
+  var old_parent = $("<%= raw escape_javascript(render @old_parent) %>");
   $("#<%= @old_parent.view_id %>").replaceWith(old_parent);
   MyFile.apply_js_item(old_parent);
 }
