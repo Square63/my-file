@@ -35,7 +35,7 @@ MyFile.menu_icon = (image) ->
   "/assets/images/menu/#{image}.png"
 
 MyFile.store = (obj, action) ->
-  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, path: window.location.pathname}, {path: "/"}
+  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, parent_path: window.location.pathname}, {path: "/"}
 
 MyFile.cut = (obj) ->
   MyFile.store obj, "cut"
@@ -59,7 +59,7 @@ MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
 
-  $('#data-container').append $('<div>').load "#{store.path} ##{store.id}", ->
+  $('#data-container').append $('<div>').load "#{store.parent_path} ##{store.id}", ->
     parent = $("##{store.id}")
     switch store.action
       when "cut"
