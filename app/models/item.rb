@@ -96,7 +96,7 @@ class Item < ActiveRecord::Base
     self.save
     old_parent.decrease_folder_size_by self.size
     parent.increase_folder_size_by self.size
-    [parent, old_parent]
+    old_parent
   end
 
   def self.update_order(items, new_order)

@@ -35,7 +35,7 @@ MyFile.menu_icon = (image) ->
   "/assets/images/menu/#{image}.png"
 
 MyFile.store = (obj, action) ->
-  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, parent_path: window.location.pathname}, {path: "/"}
+  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action}, {path: "/"}
 
 MyFile.cut = (obj) ->
   MyFile.store obj, "cut"
@@ -59,15 +59,15 @@ MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
 
-  $('#data-container').append $('<div>').load "#{store.parent_path} ##{store.id}", ->
-    parent = $("##{store.id}")
-    switch store.action
-      when "cut"
-        MyFile.do_cut parent, id
-      when "copy"
-        MyFile.do_copy parent, id
+  parent = $("##{store.id}")
 
-      else console.log "Unknown action #{store.action}"
+  switch store.action
+    when "cut"
+      MyFile.do_cut parent, id
+    when "copy"
+      MyFile.do_copy parent, id
+
+    else console.log "Unknown action #{store.action}"
 
 MyFile.apply_right_click = (objs) ->
   objs.each ->
@@ -140,7 +140,7 @@ MyFile.apply_right_click = (objs) ->
       items: items
       onShow: (menu) ->
         store = $.cookie(MyFile.store_cookie)
-        if store && store.id != obj.attr("id")
+        if store && $("##{store.id}").length && store.id != obj.attr("id")
           menu.disable "paste", false
         else
           menu.disable "paste", true
@@ -223,8 +223,7 @@ MyFile.apply_js_item = (obj) ->
     if key_code == 27
       item = $(this).parents(".item")
       item_name = item.find(".item-name")
-      item_name.show()
-      $(this).val(item_name.text()).hide()
+      MyFile.rename_item $(this).val(item_name.text())
       false
 
 MyFile.init_main_right_click = ->
@@ -264,7 +263,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && (store.action == "copy" || store.action == "cut" && store.id != MyFile.current_item_id)
+      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut" && store.id != MyFile.current_item_id)
         menu.disable "paste", false
       else
         menu.disable "paste", true
