@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_filter :get_item, only: [:show, :destroy, :update, :cut, :copy]
   before_filter :get_parent, only: [:cut, :copy]
-  before_filter :get_pasted_item, only: :show
+  before_filter :get_pasted_item, only: [:show]
 
   def index
     @folder = current_user.main_folder
@@ -29,7 +29,9 @@ class ItemsController < ApplicationController
   end
 
   def cut
-    @old_parent = @item.move_to @parent
+    @old_parent = @item.parent
+    @item.move_to @parent, @old_parent
+
     @parent = ItemPresenterFactory.for @parent
     @old_parent = ItemPresenterFactory.for @old_parent
 
@@ -39,7 +41,7 @@ class ItemsController < ApplicationController
   end
 
   def copy
-    @item = @item.copy_to(@parent, current_user)
+    @item = @item.copy_to @parent
 
     @item = ItemPresenterFactory.for @item
     @parent = ItemPresenterFactory.for @parent
@@ -85,8 +87,7 @@ class ItemsController < ApplicationController
   def get_pasted_item
     return unless cookies[:store]
     store = JSON.parse cookies[:store]
-    id = store['id'].split('-').last.to_i
-    @pasted_item = ItemPresenterFactory.for(items.find(item_id(id)))
+    @pasted_item = ItemPresenterFactory.for(items.find(item_id(store['id'])))
   end
 
 end

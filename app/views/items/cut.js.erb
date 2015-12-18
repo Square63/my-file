@@ -8,10 +8,7 @@ if($("#<%= @parent.view_id %>").length) {
   MyFile.apply_js_item(parent);
 } else {
   var item = $("<%= raw escape_javascript(render @item) %>");
-  item.hide();
-  $("#items").append(item);
-  item.fadeIn();
-  MyFile.apply_js_item(item);
+  MyFile.append_item(item);
 }
 
 if($("#<%= @old_parent.view_id %>").length) {

@@ -2,10 +2,7 @@ var item = $("<%= raw escape_javascript(render @item) %>");
 var parent = $("<%= raw escape_javascript(render @parent) %>");
 
 if(item.data("parentId") == MyFile.current_item_id) {
-  item.hide();
-  $("#items").append(item);
-  item.fadeIn();
-  MyFile.apply_js_item(item);
+  MyFile.append_item(item)
 } else {
   $("#<%= @parent.view_id %>").replaceWith(parent);
   MyFile.apply_js_item(parent);

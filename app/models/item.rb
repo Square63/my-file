@@ -70,14 +70,13 @@ class Item < ActiveRecord::Base
     item
   end
 
-  def copy_to(parent, current_user)
+  def copy_to(new_parent)
     new_item = self.copy
-    new_item.user = current_user
-    new_item.parent = parent
+    new_item.parent = new_parent
     new_item.save
 
     self.items.each do |item|
-      item.copy_to(new_item, current_user)
+      item.copy_to(new_item)
     end
 
     new_item
@@ -90,13 +89,12 @@ class Item < ActiveRecord::Base
     self.errors[:parent] << "cannot be self" if parent == self
   end
 
-  def move_to(parent)
-    old_parent = self.parent
-    self.parent = parent
+  def move_to(new_parent, old_parent)
+    self.parent = new_parent
     self.save
     old_parent.decrease_folder_size_by self.size
-    parent.increase_folder_size_by self.size
-    old_parent
+    new_parent.increase_folder_size_by self.size
+    self
   end
 
   def self.update_order(items, new_order)
