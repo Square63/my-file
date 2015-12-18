@@ -296,6 +296,12 @@ MyFile.trigger_rename_action = (obj) ->
   text_area.focus()
   text_area[0].setSelectionRange 0, end_index
 
+MyFile.append_item = (item) ->
+  item.hide()
+  $("#items").append(item)
+  item.fadeIn()
+  MyFile.apply_js_item(item)
+
 $(document).ready ->
   $(".item.real").each ->
     MyFile.apply_js_item $(this)
