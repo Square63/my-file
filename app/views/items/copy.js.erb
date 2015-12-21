@@ -1,9 +1,8 @@
-var item = $("<%= raw escape_javascript(render @item) %>");
-var parent = $("<%= raw escape_javascript(render @parent) %>");
+var item = $("<%= j render @item %>");
 
 if(item.data("parentId") == MyFile.current_item_id) {
   MyFile.append_item(item)
 } else {
-  $("#<%= @parent.view_id %>").replaceWith(parent);
-  MyFile.apply_js_item(parent);
+  var parent = $("<%= j render @parent %>");
+  MyFile.refresh_item("<%= @parent.view_id %>", parent)
 }

@@ -35,7 +35,7 @@ MyFile.menu_icon = (image) ->
   "/assets/images/menu/#{image}.png"
 
 MyFile.store = (obj, action) ->
-  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action}, {path: "/"}
+  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, item_id: obj.data("id")}, {path: "/"}
 
 MyFile.cut = (obj) ->
   MyFile.store obj, "cut"
@@ -263,7 +263,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut" && store.id != MyFile.current_item_id)
+      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut" && store.item_id != MyFile.current_item_id)
         menu.disable "paste", false
       else
         menu.disable "paste", true
@@ -301,6 +301,10 @@ MyFile.append_item = (item) ->
   $("#items").append(item)
   item.fadeIn()
   MyFile.apply_js_item(item)
+
+MyFile.refresh_item = (item_id, new_item) ->
+  $("##{item_id}").replaceWith(new_item)
+  MyFile.apply_js_item(new_item)
 
 $(document).ready ->
   $(".item.real").each ->

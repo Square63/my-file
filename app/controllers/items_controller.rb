@@ -30,7 +30,7 @@ class ItemsController < ApplicationController
 
   def cut
     @old_parent = @item.parent
-    @item.move_to @parent, @old_parent
+    @item.move_to @parent
 
     @parent = ItemPresenterFactory.for @parent
     @old_parent = ItemPresenterFactory.for @old_parent
@@ -87,7 +87,7 @@ class ItemsController < ApplicationController
   def get_pasted_item
     return unless cookies[:store]
     store = JSON.parse cookies[:store]
-    @pasted_item = ItemPresenterFactory.for(items.find(item_id(store['id'])))
+    @pasted_item = ItemPresenterFactory.for(items.find(item_id(store['item_id'])))
   end
 
 end
