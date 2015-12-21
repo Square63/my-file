@@ -89,7 +89,8 @@ class Item < ActiveRecord::Base
     self.errors[:parent] << "cannot be self" if parent == self
   end
 
-  def move_to(new_parent, old_parent)
+  def move_to(new_parent)
+    old_parent = self.parent
     self.parent = new_parent
     self.save
     old_parent.decrease_folder_size_by self.size
