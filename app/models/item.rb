@@ -93,8 +93,10 @@ class Item < ActiveRecord::Base
     old_parent = self.parent
     self.parent = new_parent
     self.save
+
     old_parent.decrease_folder_size_by self.size
     new_parent.increase_folder_size_by self.size
+
     self
   end
 

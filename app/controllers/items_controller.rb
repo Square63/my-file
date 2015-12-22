@@ -87,7 +87,8 @@ class ItemsController < ApplicationController
   def get_pasted_item
     return unless cookies[:store]
     store = JSON.parse cookies[:store]
-    @pasted_item = ItemPresenterFactory.for(items.find(item_id(store['item_id'])))
+    @pasted_item = items.find item_id(store['item_id'])
+    @pasted_item = ItemPresenterFactory.for @pasted_item
   end
 
 end
