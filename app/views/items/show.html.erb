@@ -1,8 +1,7 @@
 <% page_title @item.name %>
 
 <%= content_for :data_container do %>
-  <% render FilePresenter.new(Upload.new) %>
-  <% render @pasted_item if @pasted_item.present? %>
+  <% @pasted_item.present? ? (render @pasted_item) : (render FilePresenter.new(Upload.new)) %>
 <% end %>
 
 <%= content_for :javascript do %>

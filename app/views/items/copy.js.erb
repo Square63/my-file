@@ -4,5 +4,5 @@ if(item.data("parentId") == MyFile.current_item_id) {
   MyFile.append_item(item)
 } else {
   var parent = $("<%= j render @parent %>");
-  MyFile.refresh_item("<%= @parent.view_id %>", parent)
+  MyFile.refresh_item(parent)
 }

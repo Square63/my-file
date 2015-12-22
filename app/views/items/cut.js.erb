@@ -4,7 +4,7 @@ $("#<%= @item.view_id %>").fadeOut(function() {
 
 if($("#<%= @parent.view_id %>").length) {
   var parent = $("<%= j render @parent %>");
-  MyFile.refresh_item("<%= @parent.view_id %>", parent)
+  MyFile.refresh_item(parent)
 } else {
   var item = $("<%= raw escape_javascript(render @item) %>");
   MyFile.append_item(item);
@@ -12,5 +12,5 @@ if($("#<%= @parent.view_id %>").length) {
 
 if($("#<%= @old_parent.view_id %>").length) {
   var old_parent = $("<%= j render @old_parent %>");
-  MyFile.refresh_item("<%= @old_parent.view_id %>", old_parent)
+  MyFile.refresh_item(old_parent)
 }

@@ -302,9 +302,9 @@ MyFile.append_item = (item) ->
   item.fadeIn()
   MyFile.apply_js_item(item)
 
-MyFile.refresh_item = (item_id, new_item) ->
-  $("##{item_id}").replaceWith(new_item)
-  MyFile.apply_js_item(new_item)
+MyFile.refresh_item = (item) ->
+  $("##{item.attr('id')}").replaceWith(item)
+  MyFile.apply_js_item(item)
 
 $(document).ready ->
   $(".item.real").each ->
