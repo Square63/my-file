@@ -1,3 +1,6 @@
 ThinkingSphinx::Index.define :item, with: :active_record do
-  indexes name
+  indexes :name
+
+  set_property min_prefix_len: 1
+  where "parent_id IS NOT NULL"
 end

@@ -7,5 +7,4 @@ class ItemPresenterFactory
 
     klass.new item
   end
-
 end

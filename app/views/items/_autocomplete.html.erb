@@ -1,0 +1,19 @@
+<div class="autocomplete-item">
+  <% if item.is_a?(FilePresenter) %>
+    <div class="image-icon">
+      <%= item.parent.image_icon height: 20, width: 20 %>
+    </div>
+    <div class="name">
+      <%= item.parent.name %>
+    </div>
+    <div class="goes-to">
+      <%= image_tag "arrow-goes-to.png" %>
+    </div>
+  <% end %>
+  <div class="image-icon">
+    <%= item.image_icon height: 20, width: 20 %>
+  </div>
+  <div class="name">
+    <%= item.name %>
+  </div>
+</div>

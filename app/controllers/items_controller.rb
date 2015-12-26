@@ -11,6 +11,12 @@ class ItemsController < ApplicationController
   def show
   end
 
+  def search
+    @items = Item.perform_search(params)
+
+    render json: @items.collect {|item| ItemPresenterFactory.for(item).as_search_json }
+  end
+
   def update
     @item.attributes = item_params
     @item.save
