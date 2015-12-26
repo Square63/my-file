@@ -18,8 +18,22 @@ module ApplicationHelper
     content_for :title, title
   end
 
+  def search_box
+    content_tag :div, class: "search-box item-action" do
+      content_tag :div, class: "input-group" do
+        capture do
+          concat text_field_tag(:search, params[:search], placeholder: "Search...", class: "form-control", autocomplete: false)
+          tag = content_tag :span, class: "input-group-btn" do
+            button_tag content_tag(:span, nil, class: "glyphicon glyphicon-search"), class: "btn btn-default", id: "search-button"
+          end
+          concat tag
+        end
+      end
+    end
+  end
+
   def folder_add_button
-    content_tag :div, class: "folder-add item-add" do
+    content_tag :div, class: "folder-add item-action" do
       link_to folders_path(parent_id: @item), method: :post, remote: true, class: "btn btn-warning btn-sm add-btn" do
         capture do
           concat content_tag(:span, nil, class: "glyphicon glyphicon-folder-open")
@@ -30,7 +44,7 @@ module ApplicationHelper
   end
 
   def file_add_button
-    content_tag :div, class: "file-add item-add" do
+    content_tag :div, class: "file-add item-action" do
       capture do
         label_tag = content_tag(:label, for: "fileupload", class: "btn btn-success btn-sm add-btn") do
           capture do

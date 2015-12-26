@@ -46,3 +46,4 @@ gem 'quiet_assets', group: [:development]
 gem 'devise'
 gem 'thin'
 gem 'thinking-sphinx'
+gem 'concerned_with'

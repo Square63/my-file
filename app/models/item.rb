@@ -16,6 +16,8 @@ class Item < ActiveRecord::Base
   scope :upload, -> { where(type: "Upload") }
   scope :ordered, -> { order("position ASC") }
 
+  concerned_with :search
+
   def pathname
     Pathname.new name
   end
@@ -119,5 +121,10 @@ class Item < ActiveRecord::Base
       next if difference.zero?
       where(id: items.collect(&:id)).update_all("position = position + #{difference}")
     end
+  end
+
+  def as_json(options = {})
+    return as_search_json(options) if options[:search]
+    return super(options)
   end
 end

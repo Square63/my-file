@@ -9,18 +9,12 @@
   MyFile.current_item_id = "<%= @item.to_param %>";
 <% end %>
 
-<div class="item-buttons">
+<div class="item-actions">
   <%= file_add_button %>
   <%= folder_add_button %>
+  <%= search_box %>
 </div>
 
 <%= folder_breadcrumbs_for(@item) %>
 
-<div class="folder-container">
-  <%= form_tag reorder_items_path, remote: true, id: "reorder-form" do %>
-    <%= hidden_field_tag :new_order %>
-  <% end %>
-  <div id="items">
-    <%= render @item.items %>
-  </div>
-</div>
+<%= render "list", items: @item.items %>

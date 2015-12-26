@@ -9,6 +9,7 @@ MyFile::Application.routes.draw do
   resources :folders
   resources :items do
     collection do
+      get :search
       post :reorder
     end
     member do

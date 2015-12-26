@@ -80,7 +80,7 @@ MyFile.apply_right_click = (objs) ->
       icon: MyFile.menu_icon("open")
       alias: "open"
       action: ->
-        location.href = obj.data("url")
+        MyFile.open obj.data("url")
 
     items.push type: 'splitLine'
 
@@ -306,7 +306,25 @@ MyFile.refresh_item = (item) ->
   $("##{item.attr('id')}").replaceWith(item)
   MyFile.apply_js_item(item)
 
+MyFile.open = (url) ->
+  location.href = url
+
+MyFile.init_search = (obj) ->
+  search = obj.autocomplete
+    minLength: 1
+    source: "/items/search"
+    select: (event, ui) ->
+      if ui.item.url
+        MyFile.open ui.item.url
+    response: (event, ui) ->
+      if !ui.content.length
+        ui.content.push html: 'No results found...'
+
+  search.autocomplete('instance')._renderItem = (ul, item) ->
+    $('<li>').append(item.html).appendTo ul
+
 $(document).ready ->
   $(".item.real").each ->
     MyFile.apply_js_item $(this)
   MyFile.init_main_right_click()
+  MyFile.init_search $("#search")
