@@ -1,4 +1,4 @@
-ThinkingSphinx::Index.define :item, with: :active_record do
+ThinkingSphinx::Index.define :item, with: :active_record, delta: true do
   indexes :name
 
   set_property min_prefix_len: 1

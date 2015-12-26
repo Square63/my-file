@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123024243) do
+ActiveRecord::Schema.define(version: 20151226081516) do
 
   create_table "folders", force: :cascade do |t|
     t.string   "name",       limit: 255, default: "Folder", null: false
@@ -22,17 +22,18 @@ ActiveRecord::Schema.define(version: 20151123024243) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string   "name",         limit: 255,             null: false
+    t.string   "name",         limit: 255,                null: false
     t.string   "content_type", limit: 32
     t.string   "type",         limit: 8
     t.string   "md5",          limit: 32
-    t.integer  "size",         limit: 4,   default: 0, null: false
+    t.integer  "size",         limit: 4,   default: 0,    null: false
     t.integer  "user_id",      limit: 4
     t.integer  "parent_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position",     limit: 4,   default: 0, null: false
+    t.integer  "position",     limit: 4,   default: 0,    null: false
     t.integer  "file_id",      limit: 4
+    t.boolean  "delta",                    default: true, null: false
   end
 
   add_index "items", ["parent_id"], name: "index_items_on_parent_id", using: :btree
