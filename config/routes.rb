@@ -4,7 +4,7 @@ MyFile::Application.routes.draw do
   get "D:id" => "uploads#show", as: :download
   get "F:id" => "items#show", as: :special_folder
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: "registrations" }
   resources :uploads
   resources :folders
   resources :items do
@@ -17,7 +17,6 @@ MyFile::Application.routes.draw do
       patch :copy
     end
   end
-
   root "items#index"
 
 end
