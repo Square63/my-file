@@ -261,3 +261,10 @@ body {
   float: left;
   margin: 0 10px;
 }
+
+@media (max-width: 480px) {
+  #messages {
+    width: 150px;
+    font-size: 10px;
+  }
+}
