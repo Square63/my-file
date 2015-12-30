@@ -17,6 +17,7 @@ MyFile::Application.routes.draw do
       patch :copy
     end
   end
+
   root "items#index"
 
 end
