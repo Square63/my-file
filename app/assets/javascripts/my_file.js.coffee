@@ -263,7 +263,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && $("##{store.id}").length && (store.action == "copy" || store.action == "cut") && store.item_id != +MyFile.current_item_id
+      if store && $("##{store.id}").length && (store.action in ["copy", "cut"]) && store.item_id != +MyFile.current_item_id
         menu.disable "paste", false
       else
         menu.disable "paste", true
