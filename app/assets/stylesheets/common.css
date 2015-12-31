@@ -260,15 +260,11 @@ body {
 .autocomplete-item .goes-to {
   float: left;
   margin: 0 10px;
+}
 
 @media (max-width: 480px) {
   #messages {
-    width: 300px;
-  }
-
-  .alert {
-    width: 55%;
-    margin: 0 auto;
-    padding-right: 25px;
+    width: 150px;
+    font-size: 10px;
   }
 }
