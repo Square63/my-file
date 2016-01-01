@@ -34,40 +34,55 @@ MyFile.rename_item = (obj) ->
 MyFile.menu_icon = (image) ->
   "/assets/images/menu/#{image}.png"
 
-MyFile.store = (obj, action) ->
-  $.cookie MyFile.store_cookie, {id: obj.attr("id"), action: action, item_id: obj.data("id")}, {path: "/"}
+MyFile.store = (objs, action) ->
+  ids = []
+  item_ids = []
 
-MyFile.cut = (obj) ->
-  MyFile.store obj, "cut"
+  $(objs).each ->
+    ids.push $(this).attr("id")
+    item_ids.push $(this).data("id")
 
-MyFile.copy = (obj) ->
-  MyFile.store obj, "copy"
+  $.cookie MyFile.store_cookie, {ids: ids, action: action, item_ids: item_ids}, {path: "/"}
 
-MyFile.do_cut = (parent, id) ->
-  parent.fadeOut()
-  form = parent.find(".cut_form")
-  form.find(".item-parent-id").val id
-  form.submit()
+MyFile.do_cut = (parents, id) ->
+  for parent in parents
+    unless $(parent).data("id") == id
+      $(parent).fadeOut()
+      form = $(parent).find(".cut_form")
+      form.find(".item-parent-id").val id
+      form.submit()
+
   $.removeCookie MyFile.store_cookie, path: "/"
 
-MyFile.do_copy = (parent, id) ->
-  form = parent.find(".copy_form")
-  form.find(".item-parent-id").val id
-  form.submit()
+MyFile.do_copy = (parents, id) ->
+  for parent in parents
+
+    unless parent.data("id") == id
+      form = parent.find(".copy_form")
+      form.find(".item-parent-id").val id
+      form.submit()
 
 MyFile.paste = (id) ->
   store = $.cookie MyFile.store_cookie
   return unless store
 
-  parent = $("##{store.id}")
+  parents = []
+  for view_id in store.ids
+    parents.push $("##{view_id}")
 
   switch store.action
     when "cut"
-      MyFile.do_cut parent, id
+      MyFile.do_cut parents, id
     when "copy"
-      MyFile.do_copy parent, id
+      MyFile.do_copy parents, id
 
     else console.log "Unknown action #{store.action}"
+
+MyFile.delete = ->
+  $(".item-container.selected").each ->
+    parent = $(this).parents(".item")
+    parent.fadeOut()
+    parent.find(".delete").click()
 
 MyFile.apply_right_click = (objs) ->
   objs.each ->
@@ -89,14 +104,14 @@ MyFile.apply_right_click = (objs) ->
       icon: MyFile.menu_icon("cut")
       alias: "cut"
       action: ->
-        MyFile.cut obj
+        MyFile.store $(".item-container.selected").parents(".item"), "cut"
 
     items.push
       text: "Copy"
       icon: MyFile.menu_icon("copy")
       alias: "copy"
       action: ->
-        MyFile.copy obj
+        MyFile.store $(".item-container.selected").parents(".item"), "copy"
 
     if obj.data("type") == "folder"
       items.push
@@ -120,9 +135,8 @@ MyFile.apply_right_click = (objs) ->
       icon: MyFile.menu_icon("delete")
       alias: "delete"
       action: ->
-        if confirm "Are you sure you want to delete this?"
-          obj.fadeOut()
-          obj.find(".delete").click()
+        if confirm "Are you sure you want to delete the selected item(s)"
+          MyFile.delete()
 
     items.push type: 'splitLine'
 
@@ -140,10 +154,21 @@ MyFile.apply_right_click = (objs) ->
       items: items
       onShow: (menu) ->
         store = $.cookie(MyFile.store_cookie)
-        if store && $("##{store.id}").length && store.id != obj.attr("id")
+        if store && store.action in ['copy', 'cut'] && obj.attr("id") not in store.ids
           menu.disable "paste", false
         else
           menu.disable "paste", true
+
+        if $(".item-container.selected").length == 1
+          menu.disable "open", false
+          menu.disable "paste", false
+          menu.disable "rename", false
+          menu.disable "properties", false
+        else
+          menu.disable "open", true
+          menu.disable "paste", true
+          menu.disable "rename", true
+          menu.disable "properties", true
 
     obj.find(".handle").on "mousedown", (e) ->
       MyFile.show_menu obj.find(".handle"), e
@@ -165,7 +190,7 @@ MyFile.dump = (s) ->
   JSON.stringify s, null, "\t"
 
 MyFile.show_menu = (obj, e) ->
-  return if e.button == 2
+  return if e.button == 2 || e.ctrlKey
   MyFile.touchdown_timer = setTimeout ->
     MyFile.touchdown_timer = null
     obj.trigger "contextmenu", e
@@ -175,7 +200,6 @@ MyFile.menu_interrupt = (obj, e) ->
   if MyFile.touchdown_timer
     url = obj.data("url")
     location.href = url if url
-
   MyFile.menu_cancelled obj
 
 MyFile.menu_cancelled = (obj) ->
@@ -200,7 +224,7 @@ MyFile.apply_drag_drop = (obj) ->
         $(event.toElement).parents(".item").removeClass "hovering"
       drop: (event, ui) ->
         $(this).removeClass "drop-hover"
-        MyFile.do_cut $(event.toElement).parents(".item"), $(this).parents(".item").data("id")
+        MyFile.do_cut $(".item-container.selected").parent(), $(this).parents(".item").data("id")
 
 MyFile.apply_js_item = (obj) ->
   MyFile.apply_right_click obj
@@ -263,7 +287,7 @@ MyFile.init_main_right_click = ->
     items: items
     onShow: (menu) ->
       store = $.cookie(MyFile.store_cookie)
-      if store && $("##{store.id}").length && (store.action in ["copy", "cut"]) && store.item_id != +MyFile.current_item_id
+      if store && store.action in ['copy', 'cut'] && +MyFile.current_item_id not in store.item_ids
         menu.disable "paste", false
       else
         menu.disable "paste", true
@@ -285,6 +309,7 @@ MyFile.init_main_right_click = ->
     MyFile.menu_cancelled obj, touch
 
 MyFile.trigger_rename_action = (obj) ->
+  $(".selected").removeClass "selected"
   text_area = obj.find(".item-name-text")
   text = text_area.val()
   if text.lastIndexOf(".") > -1 && obj.data("type") != "folder"
@@ -323,8 +348,75 @@ MyFile.init_search = (obj) ->
   search.autocomplete('instance')._renderItem = (ul, item) ->
     $('<li>').append(item.html).appendTo ul
 
+MyFile.select_multiple_items = ->
+  container = $("#main-container")
+  selection = $("<div>").addClass "selection-box"
+  click_x = click_y = 0
+  active = false
+
+  $(document).mousedown (e) ->
+    $(".item-container").each ->
+      if !e.ctrlKey && !$(this).is(e.target) && (!$(e.target).parents(".item-container").hasClass "selected" || e.button == 0)
+        $(this).removeClass "selected"
+    $(e.target).parents(".item-container").addClass "selected"
+
+    if container.has(e.target).length > 0
+      active = e.button == 0 && $(".selected").length == 0
+      click_y = e.pageY
+      click_x = e.pageX
+
+  container.mousemove (e) ->
+    return unless active
+
+    move_x = e.pageX
+    move_y = e.pageY
+    width = Math.abs(move_x - click_x)
+    height = Math.abs(move_y - click_y)
+
+    return if width < 10 and height < 10
+
+    if move_x < click_x
+      new_x = click_x - width
+    else
+      new_x = click_x
+
+    if move_y < click_y
+      new_y = click_y - height
+    else
+      new_y = click_y
+
+    selection.css
+      width: width
+      height: height
+      top: new_y
+      left: new_x
+
+    selection.appendTo container
+    selected_rect = selection[0].getBoundingClientRect()
+
+    $(".item-container").each ->
+      item = $(this)[0].getBoundingClientRect()
+      unless item.right < selected_rect.left || item.left > selected_rect.right || item.bottom < selected_rect.top || item.top > selected_rect.bottom
+        $(this).addClass "selected"
+      else
+        $(this).removeClass "selected"
+
+  $(document).mouseup (e) ->
+    active = false
+    selection.remove()
+
+MyFile.select_all_items = ->
+  $(document).keydown (e) ->
+    e = e || window.event;
+    key_code = e.keyCode || e.which;
+
+    if key_code == 65 && e.ctrlKey
+      $(".item-container").addClass "selected"
+
 $(document).ready ->
   $(".item.real").each ->
     MyFile.apply_js_item $(this)
   MyFile.init_main_right_click()
   MyFile.init_search $("#search")
+  MyFile.select_multiple_items()
+  MyFile.select_all_items()

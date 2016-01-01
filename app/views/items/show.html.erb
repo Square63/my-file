@@ -2,7 +2,7 @@
 
 <%= content_for :data_container do %>
   <%= render FilePresenter.new(Upload.new) %>
-  <%= render @pasted_item if @pasted_item.present? %>
+  <%= render @pasted_items if @pasted_items.present? %>
 <% end %>
 
 <%= content_for :javascript do %>

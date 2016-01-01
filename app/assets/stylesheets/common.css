@@ -262,6 +262,18 @@ body {
   margin: 0 10px;
 }
 
+.selected {
+  background-color: #FFFFE0;
+  border: 1px solid #FFFF00;
+  border-radius: 5px;
+}
+
+.selection-box {
+  position: absolute;
+  background: transparent;
+  border: 1px solid #FFFF00;
+}
+
 @media (max-width: 480px) {
   #messages {
     width: 150px;
