@@ -2,25 +2,23 @@
 
 <%= content_for :data_container do %>
   <%= render FilePresenter.new(Upload.new) %>
+<<<<<<< HEAD
   <%= render @pasted_item if @pasted_item.present? %>
+=======
+  <%= render @pasted_items if @pasted_items.present? %>
+>>>>>>> f6a9e20ec012c9782dbfc7b59832c4454c232407
 <% end %>
 
 <%= content_for :javascript do %>
   MyFile.current_item_id = "<%= @item.to_param %>";
 <% end %>
 
-<div class="item-buttons">
+<div class="item-actions">
   <%= file_add_button %>
   <%= folder_add_button %>
+  <%= search_box %>
 </div>
 
 <%= folder_breadcrumbs_for(@item) %>
 
-<div class="folder-container">
-  <%= form_tag reorder_items_path, remote: true, id: "reorder-form" do %>
-    <%= hidden_field_tag :new_order %>
-  <% end %>
-  <div id="items">
-    <%= render @item.items %>
-  </div>
-</div>
+<%= render "list", items: @item.items %>

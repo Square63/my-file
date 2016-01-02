@@ -55,16 +55,25 @@ body {
   max-width: 100%;
 }
 
-.item-add {
+.item-action {
   float: right;
 }
 
-.file-add label, .item-add a {
+.search-box {
+  width: 300px;
+  margin-right: 10px;
+}
+
+.search-box input, .search-box button {
+  height: 30px;
+}
+
+.file-add label, .item-action a {
   width: 80px;
 }
 
-.file-add {
-  margin-left: 10px;
+.folder-add {
+  margin-right: 10px;
 }
 
 .item .item-controls {
@@ -120,7 +129,7 @@ body {
   float: left;
 }
 
-.item-buttons {
+.item-actions {
   float: right;
   margin-top: 4px;
   margin-right: 4px;
@@ -230,4 +239,44 @@ body {
 .footer .container {
   margin-top: 10px;
   text-align: center;
+}
+
+.autocomplete-item {
+  display: inline-block;
+  width: 100%;
+}
+
+.autocomplete-item .image-icon {
+  float: left;
+}
+
+.autocomplete-item .name {
+  float: left;
+  font-size: 90%;
+  margin-left: 3px;
+  margin-top: 2px;
+}
+
+.autocomplete-item .goes-to {
+  float: left;
+  margin: 0 10px;
+}
+
+.selected {
+  background-color: #FFFFE0;
+  border: 1px solid #FFFF00;
+  border-radius: 5px;
+}
+
+.selection-box {
+  position: absolute;
+  background: transparent;
+  border: 1px solid #FFFF00;
+}
+
+@media (max-width: 480px) {
+  #messages {
+    width: 150px;
+    font-size: 10px;
+  }
 }

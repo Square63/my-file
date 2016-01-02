@@ -3,10 +3,9 @@ source 'https://rubygems.org'
 ruby "2.0.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.2'
+gem 'rails', '~> 4.2.5'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
@@ -42,6 +41,9 @@ end
 
 # Use debugger
 gem 'byebug', group: [:development, :test]
+gem 'spring', group: [:development, :test]
 gem 'quiet_assets', group: [:development]
 gem 'devise'
 gem 'thin'
+gem 'thinking-sphinx'
+gem 'concerned_with'

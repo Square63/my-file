@@ -11,6 +11,12 @@ class ItemsController < ApplicationController
   def show
   end
 
+  def search
+    @items = Item.perform_search(params)
+
+    render json: @items.collect {|item| ItemPresenterFactory.for(item).as_search_json }
+  end
+
   def update
     @item.attributes = item_params
     @item.save
@@ -86,9 +92,22 @@ class ItemsController < ApplicationController
 
   def get_pasted_item
     return unless cookies[:store]
-    store = JSON.parse cookies[:store]
-    @pasted_item = items.find item_id(store['item_id'])
-    @pasted_item = ItemPresenterFactory.for @pasted_item
-  end
+    @pasted_items = []
 
+    begin
+      store = JSON.parse cookies[:store]
+
+      store["item_ids"].each do |id|
+        pasted_item = items.find_by_id(item_id(id))
+        if pasted_item.present?
+          pasted_item = ItemPresenterFactory.for pasted_item
+          @pasted_items << pasted_item
+        end
+      end
+
+    rescue
+      cookies.delete :store
+    end
+
+  end
 end

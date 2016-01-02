@@ -1,5 +1,7 @@
 /.bundle
-/log/*.log
+/log/*
+/config/*.conf
+/db/sphinx
 /tmp
 /downloads
 /db/*.sqlite3

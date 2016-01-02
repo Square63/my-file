@@ -9,15 +9,17 @@ class FilePresenter < ItemPresenter
     image
   end
 
-  def image_icon
-    content_tag :img, nil, src: image_full_path, class: "image_icon"
+  def image_icon(options = {})
+    options[:class] = [options[:class], "image_icon"].compact.join(' ')
+    options[:src] = image_full_path
+    content_tag :img, nil, options
   end
 
   def image_full_path
     file_icon_or_default_path_for(self.mime_minor)
   end
 
-  def show_path
-    url_helpers.download_path(item)
+  def show_path(options = {})
+    url_helpers.download_path(item, options)
   end
 end

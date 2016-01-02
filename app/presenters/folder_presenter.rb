@@ -5,15 +5,17 @@ class FolderPresenter < ItemPresenter
     end
   end
 
-  def image_icon
-    image_tag "folder.png", class: "image_icon"
+  def image_icon(options = {})
+    options[:class] = [options[:class], "image_icon"].compact.join(' ')
+    options[:src] = image_full_path
+    content_tag :img, nil, options
   end
 
   def image_full_path
     "/assets/images/folder.png"
   end
 
-  def show_path
-    url_helpers.special_folder_path(item)
+  def show_path(options = {})
+    url_helpers.special_folder_path(item, options)
   end
 end
