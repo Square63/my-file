@@ -372,7 +372,10 @@ MyFile.init_selection = ->
       unless (e.ctrlKey || e.metaKey) || $(this).find(".item-container").is(e.target) || (parent.hasClass "selected" || e.button != 0)
         $(this).removeClass "selected"
 
-    parent.addClass "selected" unless $(e.target).hasClass "item-name-text"
+    if parent.hasClass "selected"
+      parent.removeClass "selected" if e.ctrlKey || e.metaKey
+    else
+      parent.addClass "selected" unless $(e.target).hasClass "item-name-text"
 
     if container.has(e.target).length > 0
       active = e.button == 0 && $(".selected").length == 0
