@@ -4,6 +4,7 @@ MyFile.store_cookie = "store"
 MyFile.current_item_id = null
 MyFile.touchdown_timeout = 1000
 MyFile.touchdown_timer = null
+MyFile.key_code_for_a = 65
 
 $.cookie.json = true;
 
@@ -422,8 +423,7 @@ MyFile.init_select_all = ->
   $(document).keydown (e) ->
     e = e || window.event
     key_code = e.keyCode || e.which
-
-    if key_code == 65 && (e.ctrlKey || e.metaKey)
+    if key_code == MyFile.key_code_for_a && (e.ctrlKey || e.metaKey) && !($(e.target).is("input") || $(e.target).is("textarea"))
       $(".item.real").addClass "selected"
 
 $(document).ready ->
