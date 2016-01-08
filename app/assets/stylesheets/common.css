@@ -263,15 +263,15 @@ body {
 }
 
 .selected .item-container {
-  background-color: #FFFFE0;
-  border: 1px solid #FFFF00;
+  background-color: #DBE8F5;
+  border: 1px solid #DBE8F5;
   border-radius: 5px;
 }
 
 .selection-box {
   position: absolute;
   background: transparent;
-  border: 1px solid #FFFF00;
+  border: 1px solid #DBE8F5;
 }
 
 @media (max-width: 480px) {
