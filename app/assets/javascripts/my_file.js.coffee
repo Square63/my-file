@@ -198,7 +198,7 @@ MyFile.dump = (s) ->
   JSON.stringify s, null, "\t"
 
 MyFile.show_menu = (obj, e) ->
-  return if e.button == 2 || e.ctrlKey || e.metaKey
+  return if e.type == "mousedown"
   MyFile.touchdown_timer = setTimeout ->
     MyFile.touchdown_timer = null
     obj.trigger "contextmenu", e
