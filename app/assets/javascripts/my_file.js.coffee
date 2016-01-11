@@ -218,8 +218,40 @@ MyFile.apply_drag_drop = (obj) ->
   obj.draggable
     handle: obj.find(".handle")
     containment: "#items"
+
+    init_left_offset = []
+    init_top_offset = []
+    selected_items = []
+    starting_position = null
+
+    start: ->
+      starting_position = $(this).position()
+      selected_items = $(".item.selected")
+
+      selected_items.each ->
+        item_position = $(this).position()
+        key = $(this).attr("id")
+        init_left_offset[key] = item_position.left - starting_position.left
+        init_top_offset[key] = item_position.top - starting_position.top
+
+    drag: ->
+      current_offset = $(this).offset()
+
+      selected_items.each ->
+        key = $(this).attr("id")
+        $(this).offset
+          left: current_offset.left + init_left_offset[key]
+          top: current_offset.top + init_top_offset[key]
+
     stop: (event, ui) ->
-      MyFile.reorder_items() unless obj.hasClass("hovering")
+      return if obj.hasClass("hovering")
+      MyFile.reorder_items()
+
+      selected_items.each ->
+        key = $(this).attr("id")
+        $(this).offset
+          left: init_left_offset[key] + starting_position.left
+          top: init_top_offset[key] + starting_position.top
 
   if obj.data("type") == "folder"
     obj.find(".item-container").droppable

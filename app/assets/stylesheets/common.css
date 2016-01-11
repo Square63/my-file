@@ -17,6 +17,7 @@ body {
   min-height: 400px;
   display: block;
   background-color: #FFF;
+  overflow: hidden;
 }
 
 #data-container {
