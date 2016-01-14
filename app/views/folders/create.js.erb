@@ -1,3 +1,3 @@
-var folder = $("<%= j render @folder %>");
+var folder = $("<%= @folder.as_js_item(self) %>");
 MyFile.append_item(folder)
 MyFile.trigger_rename_action(folder);

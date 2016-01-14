@@ -3,14 +3,14 @@ $("#<%= @item.view_id %>").fadeOut(function() {
 });
 
 if($("#<%= @parent.view_id %>").length) {
-  var parent = $("<%= j render @parent %>");
+  var parent = $("<%= @parent.as_js_item(self) %>");
   MyFile.refresh_item(parent)
 } else {
-  var item = $("<%= raw escape_javascript(render @item) %>");
+  var item = $("<%= @item.as_js_item(self) %>");
   MyFile.append_item(item);
 }
 
 if($("#<%= @old_parent.view_id %>").length) {
-  var old_parent = $("<%= j render @old_parent %>");
+  var old_parent = $("<%= @old_parent.as_js_item(self) %>");
   MyFile.refresh_item(old_parent)
 }

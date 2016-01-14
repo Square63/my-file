@@ -60,4 +60,8 @@ class ItemPresenter < Presenter
 
     h
   end
+
+  def as_js_item(view)
+    return j view.render(partial: "items/item", locals: {item: self})
+  end
 end

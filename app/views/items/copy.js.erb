@@ -1,8 +1,8 @@
-var item = $("<%= j render @item %>");
+var item = $("<%= @item.as_js_item(self) %>");
 
 if(item.data("parentId") == MyFile.current_item_id) {
   MyFile.append_item(item)
 } else {
-  var parent = $("<%= j render @parent %>");
+  var parent = $("<%= @parent.as_js_item(self) %>");
   MyFile.refresh_item(parent)
 }
