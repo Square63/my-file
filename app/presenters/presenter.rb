@@ -1,5 +1,6 @@
 class Presenter < SimpleDelegator
   include ActionView::Helpers::UrlHelper
+  include ActionView::Helpers::JavaScriptHelper
 
   alias :item :__getobj__
 
