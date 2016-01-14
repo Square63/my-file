@@ -13,14 +13,15 @@ class Item < ActiveRecord::Base
       }
     end
 
-    def sphinx_options(params)
+    def sphinx_options(params, user)
       options = default_options
+      options[:with][:user_id] = user.id
 
       [params[:term], options]
     end
 
-    def perform_search(params)
-      search *sphinx_options(params)
+    def perform_search(params, user)
+      search *sphinx_options(params, user)
     end
   end
 end
